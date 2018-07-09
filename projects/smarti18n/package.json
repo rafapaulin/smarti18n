@@ -1,0 +1,28 @@
+{
+	"name": "smarti18n",
+	"version": "0.1.0",
+	"repository": "github:rafapaulin/smarti18n",
+	"keywords": [],
+	"homepage": "https://github.com/rafapaulin/smarti18n#readme",
+	"bugs": {
+		"url": "https://github.com/rafapaulin/smarti18n/issues"
+	},
+	"license": "MIT",
+	"contributors": [
+		{
+			"name": "Rafael Eduardo Paulin",
+			"url": "http://linkedin.com/in/rafaelpaulin"
+		},
+		{
+			"name": "Daniel Alves",
+			"url": "https://github.com/vertexportus"
+		}
+	],
+	"main": "src/public_api.ts",
+	"private": true,
+	"peerDependencies": {
+		"@angular/common": "^6.0.0-rc.0 || ^6.0.0",
+		"@angular/core": "^6.0.0-rc.0 || ^6.0.0"
+	},
+	"scripts": {}
+}
