@@ -1,4 +1,11 @@
-import { Directive, Input, OnInit, ElementRef } from '@angular/core';
+import {
+	Directive,
+	Input,
+	OnInit,
+	ElementRef,
+	ViewContainerRef
+} from '@angular/core';
+import { Smarti18nAssets } from '../services/smarti18n-assets.service';
 
 @Directive({
 	selector: '[smarti18n]'
@@ -7,15 +14,20 @@ import { Directive, Input, OnInit, ElementRef } from '@angular/core';
 export class Smarti18nDirective implements OnInit {
 	@Input('smarti18n') data: any;
 
-	private dotNotationRegex = /(\w+)(\.\w+)*/;
+	private dotNotationRegex = /(^\w+((\.\w+)?)+[^\.]$)/;
 	private jsonMap: string;
 	private variables: Object = null;
+	private hostComponent: any;
 
 	constructor(
-		private hostEl: ElementRef
+		private hostEl: ElementRef,
+		private vcRef: ViewContainerRef,
+		private smarti18nAssets: Smarti18nAssets
 	) {}
 
 	ngOnInit() {
+		this.hostComponent = (<any>this.vcRef)._view.component;
+
 		switch (typeof this.data) {
 			case 'string':
 				if (!this.isJsonString(this.data)) {
@@ -33,8 +45,15 @@ export class Smarti18nDirective implements OnInit {
 				throw new Error('Wrong data format!');
 		}
 
-		this.hostEl.nativeElement.textContent = 'Localized text from from the smarti18n service';
+		this.smarti18nAssets
+			.getString(this.hostComponent.constructor.name)
+			.subscribe(
+				result => {
+					this.hostEl.nativeElement.textContent = result[this.jsonMap];
+				}
+			);
 	}
+
 
 	private assembleJsonMap(mapString: string) {
 		if (!this.dotNotationRegex.test(mapString)) {
