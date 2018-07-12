@@ -1,4 +1,5 @@
 import { Pipe, PipeTransform, OnDestroy } from '@angular/core';
+
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -25,6 +26,7 @@ export class Smarti18nPipe implements PipeTransform, OnDestroy {
 	 *
 	 * @memberof Smarti18nPipe
 	 */
+
 	public ngOnDestroy(): void {
 		this.unsubscribeAll.next();
 		this.unsubscribeAll.complete();
@@ -62,4 +64,5 @@ export class Smarti18nPipe implements PipeTransform, OnDestroy {
 			.pipe(takeUntil(this.unsubscribeAll))
 			.subscribe(locale => this.transformed = this.smarti18n.getTranslation(this.path));
 	}
+
 }
