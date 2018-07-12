@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Smarti18nDirective } from './directives/smarti18n.directive';
-import { Smarti18nAssets } from './services/smarti18n-assets.service';
+import { Smarti18nService } from './services/smarti18n.service';
 
 @NgModule({
 	declarations: [
@@ -10,7 +10,7 @@ import { Smarti18nAssets } from './services/smarti18n-assets.service';
 		Smarti18nDirective
 	],
 	providers: [
-		Smarti18nAssets
+		Smarti18nService
 	]
 })
 
