@@ -1,0 +1,6 @@
+{
+	"falbackTest": "this is a fallback test",
+	"TestComponent": {
+		"test1": "This is a successfull test."
+	}
+}
