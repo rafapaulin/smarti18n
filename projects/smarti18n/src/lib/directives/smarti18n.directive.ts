@@ -3,72 +3,43 @@ import {
 	Input,
 	OnInit,
 	ElementRef,
-	ViewContainerRef
+	OnChanges,
+	SimpleChanges
 } from '@angular/core';
-import { Smarti18nAssets } from '../services/smarti18n-assets.service';
+import { Smarti18nService } from '../services/smarti18n.service';
 
 @Directive({
 	selector: '[smarti18n]'
 })
 
-export class Smarti18nDirective implements OnInit {
-	@Input('smarti18n') data: any;
+export class Smarti18nDirective implements OnInit, OnChanges {
+	@Input('smarti18n') jsonMap: string;
+	@Input('smarti18nParams') variables: any;
 
 	private dotNotationRegex = /(^\w+((\.\w+)?)+[^\.]$)/;
-	private jsonMap: string;
-	private variables: Object = null;
-	private hostComponent: any;
 
 	constructor(
 		private hostEl: ElementRef,
-		private vcRef: ViewContainerRef,
-		private smarti18nAssets: Smarti18nAssets
+		private smarti18nService: Smarti18nService
 	) {}
 
 	ngOnInit() {
-		this.hostComponent = (<any>this.vcRef)._view.component;
+		this.isValidDotNotation(this.jsonMap);
 
-		switch (typeof this.data) {
-			case 'string':
-				if (!this.isJsonString(this.data)) {
-					this.assembleJsonMap(this.data);
-				}
-				break;
-			case 'object':
-				if (!this.data.jsonMap) {
-					throw new Error('"jsonMap" property is missing!');
-				}
-
-				this.assembleJsonMap(this.data.jsonMap);
-				break;
-			default:
-				throw new Error('Wrong data format!');
-		}
-
-		this.smarti18nAssets
-			.getString(this.hostComponent.constructor.name)
-			.subscribe(
-				result => {
-					this.hostEl.nativeElement.textContent = result[this.jsonMap];
-				}
-			);
+		this.smarti18nService.onLocaleChanged.subscribe(() => {
+			this.smarti18nService.getTranslation(this.jsonMap);
+			this.hostEl.nativeElement.innerText =  this.smarti18nService.getTranslation(this.jsonMap);
+		});
 	}
 
+	ngOnChanges(changes: SimpleChanges) {
+		if (changes.currentValue !== changes.previousValue)
+			this.smarti18nService.getTranslation(this.jsonMap);
+	}
 
-	private assembleJsonMap(mapString: string) {
-		if (!this.dotNotationRegex.test(mapString)) {
+	private isValidDotNotation(jsonMap: string) {
+		if (!this.dotNotationRegex.test(jsonMap))
 			throw new Error('Wrong dot-notation map format!');
-		}
-
-		this.jsonMap = mapString;
-	}
-
-	private isJsonString(str: string) {
-		try {
-			JSON.parse(str);
-		} catch (e) {
-			return false;
-		}
 
 		return true;
 	}
