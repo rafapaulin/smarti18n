@@ -6,3 +6,4 @@ export * from './lib/services/smarti18n.service';
 export * from './lib/smarti18n.module';
 export * from './lib/directives/smarti18n.directive';
 export * from './lib/models/smarti18n-config.model';
+export * from './lib/pipes/smarti18n.pipe';
