@@ -1,6 +1,6 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { Smarti18nService } from './smarti18n.service';
+import { Smarti18nService } from './services/smarti18n.service';
 
 describe('Smarti18nService', () => {
 	beforeEach(() => {
