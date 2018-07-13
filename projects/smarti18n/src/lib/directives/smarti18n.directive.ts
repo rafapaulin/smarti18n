@@ -4,17 +4,25 @@ import {
 	OnInit,
 	ElementRef,
 	OnChanges,
-	SimpleChanges
+	SimpleChanges,
+	OnDestroy
 } from '@angular/core';
 import { Smarti18nService } from '../services/smarti18n.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Directive({
 	selector: '[smarti18n]'
 })
 
-export class Smarti18nDirective implements OnInit, OnChanges {
+export class Smarti18nDirective implements OnInit, OnChanges, OnDestroy {
 	@Input('smarti18n') jsonMap: string;
 	@Input('smarti18nParams') variables: any;
+
+	/**
+	 * Property used to track and automatically unsubscribe all subscriptions on the component.
+	 */
+	private unsubscribe = new Subject<void>();
 
 	private dotNotationRegex = /(^\w+((\.\w+)?)+[^\.]$)/;
 
@@ -26,7 +34,9 @@ export class Smarti18nDirective implements OnInit, OnChanges {
 	ngOnInit() {
 		this.isValidDotNotation(this.jsonMap);
 
-		this.smarti18nService.onLocaleChanged.subscribe(() => {
+		this.smarti18nService.onLocaleChanged
+		.pipe(takeUntil(this.unsubscribe))
+		.subscribe(() => {
 			this.smarti18nService.getTranslation(this.jsonMap);
 			this.hostEl.nativeElement.innerText =  this.smarti18nService.getTranslation(this.jsonMap);
 		});
@@ -42,5 +52,13 @@ export class Smarti18nDirective implements OnInit, OnChanges {
 			throw new Error('Wrong dot-notation map format!');
 
 		return true;
+	}
+
+	/**
+	 * Destroy the component and unsubscribe from all observers.
+	 */
+	ngOnDestroy(): void {
+		this.unsubscribe.next();
+		this.unsubscribe.complete();
 	}
 }
