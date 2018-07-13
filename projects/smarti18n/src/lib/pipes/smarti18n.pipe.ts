@@ -33,13 +33,12 @@ export class Smarti18nPipe implements PipeTransform, OnDestroy {
 	/**
 	 * localizes the input
 	 *
-	 * @param {string} value 		dot notation localizable path
-	 * @param {*} [args] 			args for localized interpolation
+	 * @param {string} value dot notation localizable path
+	 * @param {*} [args] args for localized interpolation
 	 * @returns {string}
 	 * @memberof Smarti18nPipe
 	 */
 	public transform(value: string, args?: any): string {
-		console.log('transform', { value });
 		if (!this.unsubscribeAll) {
 			this.init();
 		}
