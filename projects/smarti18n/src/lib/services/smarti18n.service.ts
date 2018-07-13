@@ -67,7 +67,7 @@ export class Smarti18nService {
 		theRequest.toPromise().then(localization => {
 			console.log('loaded');
 			this.localization = localization;
-			this.localeChanged.next(this.config.locale);
+			this.localeChanged.next();
 		});
 	}
 }
