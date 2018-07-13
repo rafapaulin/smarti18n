@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.1 - Directive unsubscritpions
+- Translation subscription service unsubscribed onDestroy()
+
 ## 0.2.0 - Assets-loaded translations
 - Translation work being triggered by the directive, or directly subscribing to the service
 - Both ```defaultLocale``` and ```locale``` are optionals, but at least one must be passed on config obj when initializing the service.
