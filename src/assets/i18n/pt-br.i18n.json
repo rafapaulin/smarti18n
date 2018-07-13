@@ -1,4 +1,8 @@
 {
+	"pipe": {
+		"works": "Pipe funciona! me pressione!",
+		"workswell": "Pipe funciona mesmo!!"
+	},
 	"TestComponent": {
 		"test1": "Este foi um teste bem sucedido."
 	}
