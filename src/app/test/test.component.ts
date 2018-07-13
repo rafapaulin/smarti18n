@@ -6,6 +6,7 @@ import { Component } from '@angular/core';
 	styleUrls: ['./test.component.css']
 })
 export class TestComponent {
+	public pipePath = 'pipe.works';
 
 	constructor() { }
 }
