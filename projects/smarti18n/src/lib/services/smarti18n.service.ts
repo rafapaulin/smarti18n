@@ -41,7 +41,6 @@ export class Smarti18nService {
 	 * @memberof Smarti18nService
 	 */
 	public setLocale(locale: string) {
-		console.log(locale);
 		this.config.locale = locale;
 		this.getLocaleFiles();
 	}
