@@ -24,8 +24,7 @@ export class Smarti18nService {
 	constructor(private http: HttpClient) {}
 
 	/**
-	 *
-	 *
+	 * Set a entirely new config object.
 	 * @param {Config} configObject
 	 * @memberof Smarti18nService
 	 */
@@ -35,8 +34,7 @@ export class Smarti18nService {
 	}
 
 	/**
-	 *
-	 *
+	 * Set a new locale to be used on translations.
 	 * @param {string} locale
 	 * @memberof Smarti18nService
 	 */
@@ -46,8 +44,7 @@ export class Smarti18nService {
 	}
 
 	/**
-	 *
-	 *
+	 * Get the complete config object
 	 * @returns
 	 * @memberof Smarti18nService
 	 */
@@ -56,8 +53,7 @@ export class Smarti18nService {
 	}
 
 	/**
-	 *
-	 *
+	 * Get the current set locale.
 	 * @returns
 	 * @memberof Smarti18nService
 	 */
@@ -66,8 +62,7 @@ export class Smarti18nService {
 	}
 
 	/**
-	 *
-	 *
+	 * Get the translation of the provided string.
 	 * @param {string} jsonMap
 	 * @param {*} [variables]
 	 * @returns
@@ -82,6 +77,11 @@ export class Smarti18nService {
 		return rawTranslation;
 	}
 
+	/**
+	 * Interpolate the variables passed on the string.
+	 * @param {string} string String to be interpolated.
+	 * @param {{}} variables Object containing the ```key:value``` pairs to be interpolated.
+	 */
 	public interpolate(string: string, variables: any) {
 		const stringVars = string.match(/:\w+[^\s:\.\,$\(\)\[\]\*]/g);
 
@@ -96,8 +96,7 @@ export class Smarti18nService {
 	}
 
 	/**
-	 *
-	 *
+	 * Reduces the ```localization``` object to retrieve the translated string.
 	 * @private
 	 * @param {string} jsonMap
 	 * @returns
@@ -111,8 +110,7 @@ export class Smarti18nService {
 	}
 
 	/**
-	 *
-	 *
+	 * Retrieve the localization files, merge them if needed and save the result on memory
 	 * @private
 	 * @memberof Smarti18nService
 	 */
@@ -138,8 +136,7 @@ export class Smarti18nService {
 	}
 
 	/**
-	 *
-	 *
+	 * Deep merge two objects avoiding ```key:vaue``` pair destruction.
 	 * @private
 	 * @param {{}} orig
 	 * @param {{}} dest
