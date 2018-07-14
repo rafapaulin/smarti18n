@@ -44,7 +44,6 @@ export class Smarti18nDirective implements OnInit, OnChanges, OnDestroy {
 	 * @memberof Smarti18nDirective
 	 */
 	public ngOnInit(): void {
-		console.log('init', this.jsonMap);
 		this.isValidDotNotation(this.jsonMap);
 
 		this.smarti18nService.onLocaleChanged
@@ -58,7 +57,6 @@ export class Smarti18nDirective implements OnInit, OnChanges, OnDestroy {
 	 * @memberof Smarti18nDirective
 	 */
 	public ngOnDestroy(): void {
-		console.log('destroy', this.jsonMap);
 		this.unsubscribe.next();
 		this.unsubscribe.complete();
 	}
@@ -70,7 +68,6 @@ export class Smarti18nDirective implements OnInit, OnChanges, OnDestroy {
 	 * @memberof Smarti18nDirective
 	 */
 	ngOnChanges(changes: SimpleChanges) {
-		console.log('changes', this.jsonMap, changes);
 		if (changes.currentValue !== changes.previousValue)
 			this.isValidDotNotation(this.jsonMap);
 			this.translate();
