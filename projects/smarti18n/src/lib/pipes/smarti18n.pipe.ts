@@ -14,15 +14,14 @@ export class Smarti18nPipe implements PipeTransform, OnDestroy {
 	private unsubscribeAll: Subject<any>;
 
 	/**
-	 *Creates an instance of Smarti18nPipe.
+	 * Creates an instance of Smarti18nPipe.
 	 * @param {Smarti18nService} smarti18n
 	 * @memberof Smarti18nPipe
 	 */
 	constructor(private smarti18n: Smarti18nService) { }
 
 	/**
-	 * destroy method - called by @angular
-	 *
+	 * Destroy method - called by @angular
 	 * @memberof Smarti18nPipe
 	 */
 	public ngOnDestroy(): void {
@@ -31,27 +30,26 @@ export class Smarti18nPipe implements PipeTransform, OnDestroy {
 	}
 
 	/**
-	 * localizes the input
-	 *
+	 * Localizes the input
 	 * @param {string} value dot notation localizable path
 	 * @param {*} [args] args for localized interpolation
 	 * @returns {string}
 	 * @memberof Smarti18nPipe
 	 */
 	public transform(value: string, args?: any): string {
-		if (!this.unsubscribeAll) {
+		if (!this.unsubscribeAll)
 			this.init();
-		}
+
 		if (this.path !== value) {
 			this.path = value;
 			this.transformed = this.smarti18n.getTranslation(this.path);
 		}
+
 		return this.transformed;
 	}
 
 	/**
-	 * init method
-	 *
+	 * Init method
 	 * @memberof Smarti18nPipe
 	 */
 	private init(): void {
