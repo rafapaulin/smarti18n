@@ -4,6 +4,8 @@
 		"workswell": "Pipe funciona mesmo!!"
 	},
 	"TestComponent": {
-		"test1": "Este foi um teste bem sucedido."
+		"test1": "Este foi um teste bem sucedido.",
+		"toggleTruth": "Vira Vira!",
+		"isTrue": "É vero!"
 	}
 }

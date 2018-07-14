@@ -25,44 +25,78 @@ export class Smarti18nDirective implements OnInit, OnChanges, OnDestroy {
 	 */
 	private unsubscribe = new Subject<void>();
 
-
 	private dotNotationRegex = /(^\w+((\.\w+)?)+[^\.]$)/;
 
+	/**
+	 *Creates an instance of Smarti18nDirective.
+	 * @param {ElementRef} hostEl
+	 * @param {Smarti18nService} smarti18nService
+	 * @memberof Smarti18nDirective
+	 */
 	constructor(
 		private hostEl: ElementRef,
 		private smarti18nService: Smarti18nService
 	) {}
 
-	ngOnInit() {
+	/**
+	 * init method - called by @angular
+	 *
+	 * @memberof Smarti18nDirective
+	 */
+	public ngOnInit(): void {
+		console.log('init', this.jsonMap);
 		this.isValidDotNotation(this.jsonMap);
 
 		this.smarti18nService.onLocaleChanged
 		.pipe(takeUntil(this.unsubscribe))
-		.subscribe(() => {
-
-			this.smarti18nService.getTranslation(this.jsonMap);
-			this.hostEl.nativeElement.innerText =  this.smarti18nService.getTranslation(this.jsonMap);
-		});
+		.subscribe(() => this.translate());
 	}
 
+	/**
+	 * destroy method - called by @angular
+	 *
+	 * @memberof Smarti18nDirective
+	 */
+	public ngOnDestroy(): void {
+		console.log('destroy', this.jsonMap);
+		this.unsubscribe.next();
+		this.unsubscribe.complete();
+	}
+
+	/**
+	 * on changes method - called by @angular
+	 *
+	 * @param {SimpleChanges} changes
+	 * @memberof Smarti18nDirective
+	 */
 	ngOnChanges(changes: SimpleChanges) {
+		console.log('changes', this.jsonMap, changes);
 		if (changes.currentValue !== changes.previousValue)
-			this.smarti18nService.getTranslation(this.jsonMap);
+			this.isValidDotNotation(this.jsonMap);
+			this.translate();
 	}
 
-	private isValidDotNotation(jsonMap: string) {
+	/**
+	 * validates if the current dot notation is valid
+	 *
+	 * @private
+	 * @param {string} jsonMap
+	 * @returns {boolean}
+	 * @memberof Smarti18nDirective
+	 */
+	private isValidDotNotation(jsonMap: string): boolean {
 		if (!this.dotNotationRegex.test(jsonMap))
 			throw new Error('Wrong dot-notation map format!');
-
 		return true;
 	}
 
 	/**
-	 * Destroy the component and unsubscribe from all observers.
+	 * does the actual translation and changing of DOM
+	 *
+	 * @private
+	 * @memberof Smarti18nDirective
 	 */
-	ngOnDestroy(): void {
-		this.unsubscribe.next();
-		this.unsubscribe.complete();
-
+	private translate(): void {
+		this.hostEl.nativeElement.innerText = this.smarti18nService.getTranslation(this.jsonMap);
 	}
 }

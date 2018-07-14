@@ -1,0 +1,7 @@
+.test-entry {
+	padding: 10px;
+}
+
+.inline-children * {
+	display: inline-block;
+}
