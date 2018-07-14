@@ -1,10 +1,16 @@
+<div class="test-entry">
+	<select [(ngModel)]="selectLocale" (change)="changeLocale()">
+		<option value="en-us">English (US)</option>
+		<option value="pt-br">Português (Brasil)</option>
+	</select>
+</div>
 <div class="test-entry" smarti18n="TestComponent.test1">
-	test works!
+	test doesn't work!
 </div>
 <div class="test-entry">
 	<button (click)="pipePath = 'pipe.workswell'">{{ pipePath | smarti18n }}</button>
 </div>
 <div class="test-entry inline-children">
-	<button smarti18n="TestComponent.toggleTruth" (click)="isTrue = !isTrue"></button>
-	<div style="padding-left: 10px;" *ngIf="isTrue" smarti18n="TestComponent.isTrue"></div>
+	<button smarti18n="TestComponent.truth.toggle" (click)="isTrue = !isTrue"></button>
+	<div style="padding-left: 10px;" *ngIf="isTrue" smarti18n="TestComponent.truth.isTrue"></div>
 </div>
