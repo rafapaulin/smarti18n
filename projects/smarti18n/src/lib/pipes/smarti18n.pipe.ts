@@ -12,6 +12,7 @@ export class Smarti18nPipe implements PipeTransform, OnDestroy {
 	private path: string;
 	private transformed: string;
 	private unsubscribeAll: Subject<any>;
+	private args: any;
 
 	/**
 	 * Creates an instance of Smarti18nPipe.
@@ -36,13 +37,15 @@ export class Smarti18nPipe implements PipeTransform, OnDestroy {
 	 * @returns {string}
 	 * @memberof Smarti18nPipe
 	 */
-	public transform(value: string, args?: any): string {
+	public transform(value: string, args: any = null): string {
+		this.args = args;
+
 		if (!this.unsubscribeAll)
 			this.init();
 
 		if (this.path !== value) {
 			this.path = value;
-			this.transformed = this.smarti18n.getTranslation(this.path);
+			this.transformed = this.smarti18n.getTranslation(this.path, args);
 		}
 
 		return this.transformed;
@@ -57,6 +60,6 @@ export class Smarti18nPipe implements PipeTransform, OnDestroy {
 		this.smarti18n
 			.onLocaleChanged
 			.pipe(takeUntil(this.unsubscribeAll))
-			.subscribe(locale => this.transformed = this.smarti18n.getTranslation(this.path));
+			.subscribe(locale => this.transformed = this.smarti18n.getTranslation(this.path, this.args));
 	}
 }

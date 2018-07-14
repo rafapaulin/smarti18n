@@ -18,3 +18,7 @@
 <div class="test-entry">
 	<h4 smarti18n="TestComponent.interpolation.test1" [smarti18nParams]="{iguanaName: 'Sauron', blackCatName: 'Lilith', whiteCatName: 'Isis'}"></h4>
 </div>
+<div class="test-entry">
+	<h5>Same as above, but with pipe:</h5>
+	<p>{{ 'TestComponent.interpolation.test1' | smarti18n:{iguanaName: 'Sauron', blackCatName: 'Lilith', whiteCatName: 'Isis'} }}</p>
+</div>
