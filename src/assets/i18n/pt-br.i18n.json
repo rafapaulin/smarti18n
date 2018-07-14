@@ -8,6 +8,9 @@
 		"truth": {
 			"isTrue": "É vero!",
 			"toggle": "Vira Vira!"
+		},
+		"interpolation": {
+			"test1": "Eu tenho um Iguana. Seu nome é :iguanaName. Eu tenho também duas gatinhas: uma preta chamada :blackCatName, e uma branca chamada :whiteCatName."
 		}
 	}
 }
