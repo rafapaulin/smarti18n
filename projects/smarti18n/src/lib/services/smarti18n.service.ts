@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { map, catchError } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { forkJoin, Subject } from 'rxjs';
 
 import { Smarti18nConfigModel as Config, ObjMap } from '../models';
@@ -16,8 +16,9 @@ export class Smarti18nService {
 	}
 
 	/**
-	 *Creates an instance of Smarti18nService.
+	 * Creates an instance of Smarti18nService.
 	 * @param {HttpClient} http
+	 * @param {InterpolatorService} interpolatorService
 	 * @memberof Smarti18nService
 	 */
 	constructor(private http: HttpClient) {}
@@ -73,7 +74,25 @@ export class Smarti18nService {
 	 * @memberof Smarti18nService
 	 */
 	public getTranslation(jsonMap: string, variables?: any) {
-		return this.getTranslatedString(jsonMap);
+		const rawTranslation = this.getTranslatedString(jsonMap);
+
+		if (variables)
+			return this.interpolate(rawTranslation, variables);
+
+		return rawTranslation;
+	}
+
+	public interpolate(string: string, variables: any) {
+		const stringVars = string.match(/:\w+[^\s:\.\,$\(\)\[\]\*]/g);
+
+		for (const i in stringVars) {
+			const key = stringVars[i].substring(1);
+
+			if (variables.hasOwnProperty(key))
+				string = string.replace(stringVars[i], variables[key]);
+		}
+
+		return string;
 	}
 
 	/**
