@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { map, catchError } from 'rxjs/operators';
 import { forkJoin, Subject } from 'rxjs';
 
-import { Smarti18nConfigModel as Config } from '../models/smarti18n-config.model';
+import { Smarti18nConfigModel as Config, ObjMap } from '../models';
 
 @Injectable()
 
@@ -16,32 +16,76 @@ export class Smarti18nService {
 		return this.localeChanged.asObservable();
 	}
 
+	/**
+	 *Creates an instance of Smarti18nService.
+	 * @param {HttpClient} http
+	 * @memberof Smarti18nService
+	 */
 	constructor(private http: HttpClient) {}
 
+	/**
+	 *
+	 *
+	 * @param {Config} configObject
+	 * @memberof Smarti18nService
+	 */
 	public setConfig(configObject: Config) {
 		this.config = {...this.config, ...configObject};
-
 		this.getLocaleFiles();
 	}
 
+	/**
+	 *
+	 *
+	 * @param {string} locale
+	 * @memberof Smarti18nService
+	 */
 	public setLocale(locale: string) {
+		console.log(locale);
 		this.config.locale = locale;
-
 		this.getLocaleFiles();
 	}
 
+	/**
+	 *
+	 *
+	 * @returns
+	 * @memberof Smarti18nService
+	 */
 	public getConfig() {
 		return this.config;
 	}
 
+	/**
+	 *
+	 *
+	 * @returns
+	 * @memberof Smarti18nService
+	 */
 	public getLocale() {
 		return this.config.locale;
 	}
 
+	/**
+	 *
+	 *
+	 * @param {string} jsonMap
+	 * @param {*} [variables]
+	 * @returns
+	 * @memberof Smarti18nService
+	 */
 	public getTranslation(jsonMap: string, variables?: any) {
 		return this.getTranslatedString(jsonMap);
 	}
 
+	/**
+	 *
+	 *
+	 * @private
+	 * @param {string} jsonMap
+	 * @returns
+	 * @memberof Smarti18nService
+	 */
 	private getTranslatedString(jsonMap: string) {
 		const jsomMapArray = jsonMap.split('.');
 		const fnReduce = (a, b) => a ? a[b] : null;
@@ -49,6 +93,12 @@ export class Smarti18nService {
 		return	jsomMapArray.reduce(fnReduce, this.localization) || jsonMap;
 	}
 
+	/**
+	 *
+	 *
+	 * @private
+	 * @memberof Smarti18nService
+	 */
 	private getLocaleFiles() {
 		const requests = [];
 		let theRequest;
@@ -60,7 +110,7 @@ export class Smarti18nService {
 			requests.push(this.http.get(`/assets/i18n/${this.config.locale}.i18n.json`));
 
 		if (requests.length > 1)
-			theRequest = forkJoin(requests).pipe(map(([defaultLocale, locale]) => ({...defaultLocale, ...locale})));
+			theRequest = forkJoin(requests).pipe(map(([defaultLocale, locale]) => this.deepMerge(defaultLocale, locale)));
 		else
 			theRequest = requests[0];
 
@@ -68,5 +118,25 @@ export class Smarti18nService {
 			this.localization = localization;
 			this.localeChanged.next();
 		});
+	}
+
+	/**
+	 *
+	 *
+	 * @private
+	 * @param {{}} orig
+	 * @param {{}} dest
+	 * @returns {*}
+	 * @memberof Smarti18nService
+	 */
+	private deepMerge(base: ObjMap<string>, merge: ObjMap<string>): ObjMap<string> {
+		const isObj = val => val && typeof val === 'object';
+		const result = { ...base, ...merge };
+		Object.keys(merge).forEach(k => {
+			if (isObj(merge[k]))
+				result[k] = this.deepMerge(base[k] as ObjMap<string>, merge[k] as ObjMap<string>);
+			else result[k] = merge[k];
+		});
+		return result;
 	}
 }

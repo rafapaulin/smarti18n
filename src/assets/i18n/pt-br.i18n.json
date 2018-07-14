@@ -5,7 +5,9 @@
 	},
 	"TestComponent": {
 		"test1": "Este foi um teste bem sucedido.",
-		"toggleTruth": "Vira Vira!",
-		"isTrue": "É vero!"
+		"truth": {
+			"isTrue": "É vero!",
+			"toggle": "Vira Vira!"
+		}
 	}
 }
