@@ -5,7 +5,10 @@
 		"truth": {
 			"isTrue": "True!",
 			"toggle": "Turn it around",
-			"fallback": "fallback"
+			"fallback": "This is a fallback"
+		},
+		"interpolation": {
+			"test1": "I have an iguana. Its name is :iguanaName. I also have two cats: a black one named :blackCatName, and a white one called :whiteCatName."
 		}
 	}
 }

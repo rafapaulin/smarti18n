@@ -18,7 +18,7 @@ import { takeUntil } from 'rxjs/operators';
 
 export class Smarti18nDirective implements OnInit, OnChanges, OnDestroy {
 	@Input('smarti18n') jsonMap: string;
-	@Input('smarti18nParams') variables: any;
+	@Input('smarti18nParams') variables: any = null;
 
 	/**
 	 * Property used to track and automatically unsubscribe all subscriptions on the component.
@@ -94,6 +94,6 @@ export class Smarti18nDirective implements OnInit, OnChanges, OnDestroy {
 	 * @memberof Smarti18nDirective
 	 */
 	private translate(): void {
-		this.hostEl.nativeElement.innerText = this.smarti18nService.getTranslation(this.jsonMap);
+		this.hostEl.nativeElement.innerText = this.smarti18nService.getTranslation(this.jsonMap, this.variables);
 	}
 }
