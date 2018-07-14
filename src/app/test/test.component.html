@@ -1,7 +1,10 @@
-<p smarti18n="TestComponent.test1">
-  test works!
-</p>
-<p>
+<div class="test-entry" smarti18n="TestComponent.test1">
+	test works!
+</div>
+<div class="test-entry">
 	<button (click)="pipePath = 'pipe.workswell'">{{ pipePath | smarti18n }}</button>
-	{{ 'pipe.works' | smarti18n }}
-</p>
+</div>
+<div class="test-entry inline-children">
+	<button smarti18n="TestComponent.toggleTruth" (click)="isTrue = !isTrue"></button>
+	<div style="padding-left: 10px;" *ngIf="isTrue" smarti18n="TestComponent.isTrue"></div>
+</div>

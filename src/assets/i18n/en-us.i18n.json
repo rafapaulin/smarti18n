@@ -1,6 +1,8 @@
 {
 	"falbackTest": "this is a fallback test",
 	"TestComponent": {
-		"test1": "This is a successfull test."
+		"test1": "This is a successfull test.",
+		"toggleTruth": "Turn it around!",
+		"isTrue": "True!"
 	}
 }
