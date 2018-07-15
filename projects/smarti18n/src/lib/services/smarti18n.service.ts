@@ -1,27 +1,39 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
 import { map } from 'rxjs/operators';
-import { forkJoin, Subject } from 'rxjs';
+import { forkJoin, Subject, Observable } from 'rxjs';
 
+import { ConfigService } from './config/config.service';
 import { Smarti18nConfigModel as Config, ObjMap } from '../models';
+import { ObjectUtils } from '../utils';
+import { LocaleLoaderService } from './loaders/locale-loader.service';
 
 @Injectable()
 export class Smarti18nService {
-	private localization: any;
-	private config: Config = {};
+	private localization: ObjMap<string>;
 	private localeChanged = new Subject();
-	public get onLocaleChanged(): any {
+	public get onLocaleChanged(): Observable<any> {
 		return this.localeChanged.asObservable();
 	}
+	public get config(): Config { return this.configService.config; }
 
 	/**
-	 * Creates an instance of Smarti18nService.
+	 *Creates an instance of Smarti18nService.
 	 * @param {HttpClient} http
-	 * @param {InterpolatorService} interpolatorService
+	 * @param {ConfigService} config
 	 * @memberof Smarti18nService
 	 */
-	constructor(private http: HttpClient) {}
+	constructor(
+		private http: HttpClient,
+		private configService: ConfigService,
+		private loader: LocaleLoaderService
+	) {
+		this.configService
+			.onConfigChanged
+			.subscribe(
+				configChange => this.loadLocaleFiles(configChange.config)
+			);
+	}
 
 	/**
 	 * Set a entirely new config object.
@@ -29,8 +41,7 @@ export class Smarti18nService {
 	 * @memberof Smarti18nService
 	 */
 	public setConfig(configObject: Config) {
-		this.config = {...this.config, ...configObject};
-		this.getLocaleFiles();
+		this.configService.applyConfig(configObject);
 	}
 
 	/**
@@ -39,17 +50,7 @@ export class Smarti18nService {
 	 * @memberof Smarti18nService
 	 */
 	public setLocale(locale: string) {
-		this.config.locale = locale;
-		this.getLocaleFiles();
-	}
-
-	/**
-	 * Get the complete config object
-	 * @returns
-	 * @memberof Smarti18nService
-	 */
-	public getConfig() {
-		return this.config;
+		this.configService.applyConfig({ locale });
 	}
 
 	/**
@@ -117,43 +118,19 @@ export class Smarti18nService {
 	 * @private
 	 * @memberof Smarti18nService
 	 */
-	private getLocaleFiles() {
-		const requests = [];
-		let theRequest;
-
-		if (this.config.defaultLocale)
-			requests.push(this.http.get(`/assets/i18n/${this.config.defaultLocale}.i18n.json`));
-
-		if (this.config.locale)
-			requests.push(this.http.get(`/assets/i18n/${this.config.locale}.i18n.json`));
-
-		if (requests.length > 1)
-			theRequest = forkJoin(requests).pipe(map(([defaultLocale, locale]) => this.deepMerge(defaultLocale, locale)));
-		else
-			theRequest = requests[0];
-
-		theRequest.toPromise().then(localization => {
-			this.localization = localization;
-			this.localeChanged.next();
-		});
-	}
-
-	/**
-	 * Deep merge two objects avoiding ```key:vaue``` pair destruction.
-	 * @private
-	 * @param {{}} orig
-	 * @param {{}} dest
-	 * @returns {*}
-	 * @memberof Smarti18nService
-	 */
-	private deepMerge(base: ObjMap<string>, merge: ObjMap<string>): ObjMap<string> {
-		const isObj = val => val && typeof val === 'object';
-		const result = { ...base, ...merge };
-		Object.keys(merge).forEach(k => {
-			if (isObj(merge[k]))
-				result[k] = this.deepMerge(base[k] as ObjMap<string>, merge[k] as ObjMap<string>);
-			else result[k] = merge[k];
-		});
-		return result;
+	private loadLocaleFiles(config: Config) {
+		const requests = [config.defaultLocale, config.locale]
+			.filter(locale => !!locale)
+			.map(locale => this.loader.load(locale));
+		const request = requests.length > 1
+			? forkJoin(requests).pipe(map(([defaultLocale, locale]) => ObjectUtils.deepMerge(defaultLocale, locale)))
+			: requests[0];
+		// handle request
+		if (request) {
+			request.toPromise().then(localization => {
+				this.localization = localization;
+				this.localeChanged.next();
+			});
+		}
 	}
 }
