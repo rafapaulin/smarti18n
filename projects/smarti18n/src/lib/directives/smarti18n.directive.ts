@@ -11,7 +11,6 @@ import { Smarti18nService } from '../services/smarti18n.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-
 @Directive({
 	selector: '[smarti18n]'
 })
