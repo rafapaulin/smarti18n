@@ -65,6 +65,10 @@ describe('Smarti18nService', () => {
 			test: 'testado'
 		};
 
+		afterEach(() => {
+			httpMock.verify();
+		});
+
 		it('there is a fallback in default locale', () => {
 			smarti18n.setConfig({ defaultLocale: 'en-us', locale: 'pt-br' });
 			smarti18n.onLocaleChanged.subscribe(() => {
