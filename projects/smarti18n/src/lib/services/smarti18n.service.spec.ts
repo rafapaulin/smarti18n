@@ -3,7 +3,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 
 import { Smarti18nService } from './smarti18n.service';
 
-fdescribe('Smarti18nService', () => {
+describe('Smarti18nService', () => {
 	let smarti18n: Smarti18nService;
 	let httpMock: HttpTestingController;
 
