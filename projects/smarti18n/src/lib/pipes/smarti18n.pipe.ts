@@ -8,6 +8,7 @@ import { Smarti18nService } from '../services/smarti18n.service';
 	name: 'smarti18n',
 	pure: false
 })
+
 export class Smarti18nPipe implements PipeTransform, OnDestroy {
 	private path: string;
 	private transformed: string;
@@ -33,22 +34,38 @@ export class Smarti18nPipe implements PipeTransform, OnDestroy {
 	/**
 	 * Localizes the input
 	 * @param {string} value dot notation localizable path
-	 * @param {*} [args] args for localized interpolation
+	 * @param {*} args ```Key:Value``` pairs object for localized interpolation
 	 * @returns {string}
 	 * @memberof Smarti18nPipe
 	 */
 	public transform(value: string, args: any = null): string {
-		this.args = args;
-
 		if (!this.unsubscribeAll)
 			this.init();
 
-		if (this.path !== value) {
+		if (this.path !== value || this.argsPropertyHasChanged(args)) {
+			this.args = args;
 			this.path = value;
 			this.transformed = this.smarti18n.getTranslation(this.path, args);
 		}
 
 		return this.transformed;
+	}
+
+	/**
+	 * Checks if any of the properties of the args object has changed.
+	 * @param {*} args ```Key:Value``` pairs object for localized interpolation.
+	 * @returns {boolean} True if there is any change do the value of the properties.
+	 * @memberof Smarti18nPipe
+	 */
+	private argsPropertyHasChanged(args: any): boolean {
+		if (this.args && args)
+			for (const key in Object.keys(this.args))
+				if (this.args[key] !== args[key])
+					return true;
+		else
+			return true;
+
+		return false;
 	}
 
 	/**
