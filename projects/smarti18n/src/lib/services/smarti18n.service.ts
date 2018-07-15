@@ -7,10 +7,9 @@ import { forkJoin, Subject } from 'rxjs';
 import { Smarti18nConfigModel as Config, ObjMap } from '../models';
 
 @Injectable()
-
 export class Smarti18nService {
 	private localization: any;
-	private config: Config;
+	private config: Config = {};
 	private localeChanged = new Subject();
 	public get onLocaleChanged(): any {
 		return this.localeChanged.asObservable();
