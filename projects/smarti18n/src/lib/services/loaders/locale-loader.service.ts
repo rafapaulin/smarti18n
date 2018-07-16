@@ -1,10 +1,12 @@
-import { Injectable, Injector } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { ObjMap } from '../../models';
+import { LocaleLoaderInterface } from './locale-loader.interface';
+import { DefaultLoaderService } from './default-locale-loader.service';
 
 @Injectable()
-export abstract class LocaleLoaderService {
+export abstract class LocaleLoaderService implements LocaleLoaderInterface {
 	/**
 	 * loads locale data
 	 *

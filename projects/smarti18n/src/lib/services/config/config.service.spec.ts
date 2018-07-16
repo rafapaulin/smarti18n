@@ -33,8 +33,8 @@ describe('ConfigService', () => {
 
 		it('should emit observable new config', () => {
 			service.onConfigChanged.subscribe(newConfig => {
-				expect(newConfig.defaultLocale).toBe('en-us');
-				expect(newConfig.locale).toBe('pt-br');
+				expect(newConfig.config.defaultLocale).toBe('en-us');
+				expect(newConfig.changes.locale).toBe('pt-br');
 			});
 			service.applyConfig({
 				locale: 'pt-br'
