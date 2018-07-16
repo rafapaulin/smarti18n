@@ -42,12 +42,24 @@
 		<p smarti18n="TestComponent.pluralization.test3" smarti18nToCount="1" [smarti18nParams]="{qtd: 1}"></p>
 		<h5>Simple (plural):</h5>
 		<p smarti18n="TestComponent.pluralization.test3" smarti18nToCount="5" [smarti18nParams]="{qtd: 5}"></p>
+
+		<h4>Pluralization - Same as above, with pipe:</h4>
+		<h5>Simple (singular):</h5>
+		<p>{{ 'TestComponent.pluralization.test1' | smarti18n:null:1 }}</p>
+		<h5>Simple (plural):</h5>
+		<p>{{ 'TestComponent.pluralization.test1' | smarti18n:null:5 }}</p>
 		<h5>Complex (none):</h5>
-		<p smarti18n="TestComponent.pluralization.test2" smarti18nToCount="0"></p>
+		<p>{{ 'TestComponent.pluralization.test2' | smarti18n:null:0 }}</p>
 		<h5>Complex (one):</h5>
-		<p smarti18n="TestComponent.pluralization.test2" smarti18nToCount="1"></p>
+		<p>{{ 'TestComponent.pluralization.test2' | smarti18n:null:1 }}</p>
 		<h5>Complex (some):</h5>
-		<p smarti18n="TestComponent.pluralization.test2" smarti18nToCount="5"></p>
+		<p>{{ 'TestComponent.pluralization.test2' | smarti18n:null:5 }}</p>
 		<h5>Complex (many):</h5>
-		<p smarti18n="TestComponent.pluralization.test2" smarti18nToCount="20"></p>
+		<p>{{ 'TestComponent.pluralization.test2' | smarti18n:null:20 }}</p>
+
+		<h4>pluralization with variable interpolation and pipe:</h4>
+		<h5>Simple (singular):</h5>
+		<p>{{ 'TestComponent.pluralization.test3' | smarti18n:{qtd: 1}:1 }}</p>
+		<h5>Simple (plural):</h5>
+		<p>{{ 'TestComponent.pluralization.test3' | smarti18n:{qtd: 5}:5 }}</p>
 </div>
