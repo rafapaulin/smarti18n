@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ModuleWithProviders } from '@angular/core';
 import { Smarti18nDirective } from './directives/smarti18n.directive';
 import { Smarti18nPipe } from './pipes/smarti18n.pipe';
 import { Smarti18nService, ConfigService, LocaleLoaderService, DefaultLoaderService } from './services';
@@ -11,12 +11,16 @@ import { Smarti18nService, ConfigService, LocaleLoaderService, DefaultLoaderServ
 	exports: [
 		Smarti18nDirective,
 		Smarti18nPipe
-	],
-	providers: [
-		ConfigService,
-		{ provide: LocaleLoaderService, useClass: DefaultLoaderService },
-		Smarti18nService
 	]
 })
 
-export class Smarti18nModule { }
+export class Smarti18nModule {
+	public static defaultLoader(): ModuleWithProviders {
+		return {
+			ngModule: Smarti18nModule,
+			providers: [
+				{ provide: LocaleLoaderService, useClass: DefaultLoaderService }
+			]
+		};
+	}
+}

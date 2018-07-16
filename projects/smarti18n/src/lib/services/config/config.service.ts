@@ -3,7 +3,9 @@ import { Subject, Observable } from 'rxjs';
 
 import { Smarti18nConfigModel as Config, ConfigChange } from '../../models';
 
-@Injectable()
+@Injectable({
+	providedIn: 'root'
+})
 export class ConfigService {
 	private _config: Config = {};
 	private configChanged = new Subject<ConfigChange>();

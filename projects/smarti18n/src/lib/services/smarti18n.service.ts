@@ -8,7 +8,9 @@ import { Smarti18nConfigModel as Config, ObjMap } from '../models';
 import { ObjectUtils } from '../utils';
 import { LocaleLoaderService } from './loaders/locale-loader.service';
 
-@Injectable()
+@Injectable({
+	providedIn: 'root'
+})
 export class Smarti18nService {
 	private localization: ObjMap<string>;
 	private localeChanged = new Subject();
@@ -19,12 +21,11 @@ export class Smarti18nService {
 
 	/**
 	 *Creates an instance of Smarti18nService.
-	 * @param {HttpClient} http
-	 * @param {ConfigService} config
+	 * @param {ConfigService} configService
+	 * @param {LocaleLoaderService} loader
 	 * @memberof Smarti18nService
 	 */
 	constructor(
-		private http: HttpClient,
 		private configService: ConfigService,
 		private loader: LocaleLoaderService
 	) {

@@ -1,19 +1,28 @@
 import { TestBed, getTestBed, inject } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { Observable, of as observableOf } from 'rxjs';
 
 import { Smarti18nService } from './smarti18n.service';
+import { LocaleLoaderService } from './loaders/locale-loader.service';
+import { ObjMap } from '../models';
+
+
+class LocaleLoaderServiceStub {
+	public load(locale: string): Observable<ObjMap<string>> { return null; }
+}
 
 describe('Smarti18nService', () => {
+	let loader: LocaleLoaderService;
 	let smarti18n: Smarti18nService;
-	let httpMock: HttpTestingController;
 
 	beforeEach(() => {
 		TestBed.configureTestingModule({
-			imports: [HttpClientTestingModule],
-			providers: [Smarti18nService]
+			providers: [
+				Smarti18nService,
+				{ provide: LocaleLoaderService, useClass: LocaleLoaderServiceStub }
+			]
 		});
 		smarti18n = getTestBed().get(Smarti18nService);
-		httpMock = getTestBed().get(HttpTestingController);
+		loader = getTestBed().get(LocaleLoaderService);
 	});
 
 	it('should be created', () => {
@@ -28,8 +37,15 @@ describe('Smarti18nService', () => {
 			test: 'testado'
 		};
 
-		afterEach(() => {
-			httpMock.verify();
+		beforeEach(() => {
+			spyOn(loader, 'load').and.callFake(locale => {
+				switch (locale) {
+					case 'pt-br':
+						return observableOf(dummyLocale_pt_br);
+					case 'en-us':
+						return observableOf(dummyLocale_en_us);
+				}
+			});
 		});
 
 		it('setConfig({ defaultLocale, locale })', () => {
@@ -38,11 +54,6 @@ describe('Smarti18nService', () => {
 				expect(smarti18n.getLocale()).toBe('pt-br');
 				expect(smarti18n.getTranslation('test')).toBe('testado');
 			});
-
-			const enReq = httpMock.expectOne('/assets/i18n/en-us.i18n.json');
-			const ptReq = httpMock.expectOne('/assets/i18n/pt-br.i18n.json');
-			enReq.flush(dummyLocale_en_us);
-			ptReq.flush(dummyLocale_pt_br);
 		});
 
 		it('setLocale()', () => {
@@ -51,8 +62,6 @@ describe('Smarti18nService', () => {
 				expect(smarti18n.getLocale()).toBe('pt-br');
 				expect(smarti18n.getTranslation('test')).toBe('testado');
 			});
-			const req = httpMock.expectOne('/assets/i18n/pt-br.i18n.json');
-			req.flush(dummyLocale_pt_br);
 		});
 	});
 
@@ -65,8 +74,15 @@ describe('Smarti18nService', () => {
 			test: 'testado'
 		};
 
-		afterEach(() => {
-			httpMock.verify();
+		beforeEach(() => {
+			spyOn(loader, 'load').and.callFake(locale => {
+				switch (locale) {
+					case 'pt-br':
+						return observableOf(dummyLocale_pt_br);
+					case 'en-us':
+						return observableOf(dummyLocale_en_us);
+				}
+			});
 		});
 
 		it('there is a fallback in default locale', () => {
@@ -76,11 +92,6 @@ describe('Smarti18nService', () => {
 				expect(smarti18n.getTranslation('test')).toBe('testado');
 				expect(smarti18n.getTranslation('fallback')).toBe('fallback');
 			});
-
-			const enReq = httpMock.expectOne('/assets/i18n/en-us.i18n.json');
-			const ptReq = httpMock.expectOne('/assets/i18n/pt-br.i18n.json');
-			enReq.flush(dummyLocale_en_us);
-			ptReq.flush(dummyLocale_pt_br);
 		});
 	});
 });

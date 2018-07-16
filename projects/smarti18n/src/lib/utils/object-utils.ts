@@ -11,12 +11,12 @@ export class ObjectUtils {
 	 * @returns {ObjMap<T>}
 	 * @memberof ObjectUtils
 	 */
-	public static deepMerge<T>(base: ObjMap<T>, merge: ObjMap<T>): ObjMap<T> {
+	public static deepMerge(base: any, merge: any): any {
 		const isObj = val => val && typeof val === 'object';
 		const result = { ...base, ...merge };
 		Object.keys(merge).forEach(k => {
 			if (isObj(merge[k]))
-				result[k] = this.deepMerge(base[k] as ObjMap<T>, merge[k] as ObjMap<T>);
+				result[k] = this.deepMerge(base[k], merge[k]);
 			else result[k] = merge[k];
 		});
 		return result;
