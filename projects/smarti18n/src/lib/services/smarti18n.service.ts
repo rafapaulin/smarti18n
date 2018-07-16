@@ -70,13 +70,15 @@ export class Smarti18nService {
 	 * @returns
 	 * @memberof Smarti18nService
 	 */
-	public getTranslation(jsonMap: string, variables?: any) {
-		const rawTranslation = this.getTranslatedString(jsonMap);
+	public getTranslation(jsonMap: string, variables?: any, pluralize?: number) {
+		if (this.localization) {
+			let translation = this.getTranslatedString(jsonMap);
 
-		if (variables)
-			return StringUtils.interpolate(rawTranslation, variables);
+			if (pluralize) translation = StringUtils.pluralize(translation, pluralize);
+			if (variables) translation = StringUtils.interpolate(translation, variables);
 
-		return rawTranslation;
+			return translation;
+		}
 	}
 
 	/**
