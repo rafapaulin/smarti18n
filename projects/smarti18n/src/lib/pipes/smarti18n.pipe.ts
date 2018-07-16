@@ -13,7 +13,8 @@ export class Smarti18nPipe implements PipeTransform, OnDestroy {
 	private path: string;
 	private transformed: string;
 	private unsubscribeAll: Subject<any>;
-	private args: any;
+	private vars: any;
+	private count: number;
 
 	/**
 	 * Creates an instance of Smarti18nPipe.
@@ -34,33 +35,39 @@ export class Smarti18nPipe implements PipeTransform, OnDestroy {
 	/**
 	 * Localizes the input
 	 * @param {string} value dot notation localizable path
-	 * @param {*} args ```Key:Value``` pairs object for localized interpolation
+	 * @param {*} vars ```Key:Value``` pairs object for localized interpolation
 	 * @returns {string}
 	 * @memberof Smarti18nPipe
 	 */
-	public transform(value: string, args: any = null): string {
+	public transform(value: string, vars: any = null, count?: number): string {
 		if (!this.unsubscribeAll)
 			this.init();
 
-		if (this.path !== value || this.argsPropertyHasChanged(args)) {
-			this.args = args;
+		if (
+			this.path !== value ||
+			this.varsPropertyHasChanged(vars) ||
+			(this.count && this.count !== count)
+		) {
+			this.vars = vars;
 			this.path = value;
-			this.transformed = this.smarti18n.getTranslation(this.path, args);
+			this.count = count;
+			console.log(this.count);
+			this.transformed = this.smarti18n.getTranslation(this.path, this.vars, this.count);
 		}
 
 		return this.transformed;
 	}
 
 	/**
-	 * Checks if any of the properties of the args object has changed.
-	 * @param {*} args ```Key:Value``` pairs object for localized interpolation.
+	 * Checks if any of the properties of the vars object has changed.
+	 * @param {*} vars ```Key:Value``` pairs object for localized interpolation.
 	 * @returns {boolean} True if there is any change do the value of the properties.
 	 * @memberof Smarti18nPipe
 	 */
-	private argsPropertyHasChanged(args: any): boolean {
-		if (this.args && args)
-			for (const key in Object.keys(this.args))
-				if (this.args[key] !== args[key])
+	private varsPropertyHasChanged(vars: any): boolean {
+		if (this.vars && vars)
+			for (const key in Object.keys(this.vars))
+				if (this.vars[key] !== vars[key])
 					return true;
 		else
 			return true;
@@ -77,6 +84,6 @@ export class Smarti18nPipe implements PipeTransform, OnDestroy {
 		this.smarti18n
 			.onLocaleChanged
 			.pipe(takeUntil(this.unsubscribeAll))
-			.subscribe(locale => this.transformed = this.smarti18n.getTranslation(this.path, this.args));
+			.subscribe(locale => this.transformed = this.smarti18n.getTranslation(this.path, this.vars, this.count));
 	}
 }
