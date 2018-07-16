@@ -74,7 +74,7 @@ export class Smarti18nService {
 		if (this.localization) {
 			let translation = this.getTranslatedString(jsonMap);
 
-			if (pluralize) translation = StringUtils.pluralize(translation, pluralize);
+			if (pluralize || pluralize === 0) translation = StringUtils.pluralize(translation, pluralize);
 			if (variables) translation = StringUtils.interpolate(translation, variables);
 
 			return translation;
