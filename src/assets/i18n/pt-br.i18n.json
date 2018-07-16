@@ -14,7 +14,8 @@
 		},
 		"pluralization": {
 			"test1": "Existe uma laranja.|Existem várias laranjas.",
-			"test2": "{0}Não existe nenhuma laranja.|{1}Existe uma laranja.|[2,10]Existe algumas laranjas.|[11,*]Existe várias laranjas."
+			"test2": "{0}Não existe nenhuma laranja.|{1}Existe uma laranja.|[2,10]Existe algumas laranjas.|[11,*]Existe várias laranjas.",
+			"test3": "Existe :qtd laranja.|Existe :qtd laranjas."
 		}
 	}
 }

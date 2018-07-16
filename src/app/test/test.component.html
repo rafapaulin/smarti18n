@@ -36,4 +36,18 @@
 		<p smarti18n="TestComponent.pluralization.test2" smarti18nToCount="5"></p>
 		<h5>Complex (many):</h5>
 		<p smarti18n="TestComponent.pluralization.test2" smarti18nToCount="20"></p>
+
+		<h4>pluralization with variable interpolation:</h4>
+		<h5>Simple (singular):</h5>
+		<p smarti18n="TestComponent.pluralization.test3" smarti18nToCount="1" [smarti18nParams]="{qtd: 1}"></p>
+		<h5>Simple (plural):</h5>
+		<p smarti18n="TestComponent.pluralization.test3" smarti18nToCount="5" [smarti18nParams]="{qtd: 5}"></p>
+		<h5>Complex (none):</h5>
+		<p smarti18n="TestComponent.pluralization.test2" smarti18nToCount="0"></p>
+		<h5>Complex (one):</h5>
+		<p smarti18n="TestComponent.pluralization.test2" smarti18nToCount="1"></p>
+		<h5>Complex (some):</h5>
+		<p smarti18n="TestComponent.pluralization.test2" smarti18nToCount="5"></p>
+		<h5>Complex (many):</h5>
+		<p smarti18n="TestComponent.pluralization.test2" smarti18nToCount="20"></p>
 </div>
