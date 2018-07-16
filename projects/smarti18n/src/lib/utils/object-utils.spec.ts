@@ -5,7 +5,8 @@ describe('ObjectUtils', () => {
 		const base = {
 			a: 1,
 			b: {
-				c: 2
+				c: 2,
+				d: 4
 			}
 		};
 		const data = {
@@ -18,6 +19,8 @@ describe('ObjectUtils', () => {
 		it('that deep merges data properly', () => {
 			const result = ObjectUtils.deepMerge(base, data);
 			expect(result.b.c).toBe(3);
+			expect(result.b.d).toBeTruthy();
+			expect(result.b.d).toBe(4);
 		});
 	});
 });

@@ -5,7 +5,7 @@ import { forkJoin, Subject, Observable } from 'rxjs';
 
 import { ConfigService } from './config/config.service';
 import { Smarti18nConfigModel as Config, ObjMap } from '../models';
-import { ObjectUtils } from '../utils';
+import { ObjectUtils, StringUtils } from '../utils';
 import { LocaleLoaderService } from './loaders/locale-loader.service';
 
 @Injectable({
@@ -74,30 +74,9 @@ export class Smarti18nService {
 		const rawTranslation = this.getTranslatedString(jsonMap);
 
 		if (variables)
-			return this.interpolate(rawTranslation, variables);
+			return StringUtils.interpolate(rawTranslation, variables);
 
 		return rawTranslation;
-	}
-
-	/**
-	 * Interpolate the variables passed on the string.
-	 * @param {string} string String to be interpolated.
-	 * @param {{}} variables Object containing the ```key:value``` pairs to be interpolated.
-	 */
-	public interpolate(string: string, variables: any) {
-		const stringVars = string.match(/:\w+[^\s:\.\,$\(\)\[\]\*]/g);
-
-		if (!stringVars || stringVars.length <= 0)
-			throw new Error('There is no parsable vars on the string. Please use the ":varName" notation.');
-
-		for (const i in stringVars) {
-			const key = stringVars[i].substring(1);
-
-			if (variables.hasOwnProperty(key))
-				string = string.replace(stringVars[i], variables[key]);
-		}
-
-		return string;
 	}
 
 	/**

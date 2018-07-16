@@ -6,9 +6,9 @@ export class ObjectUtils {
 	 *
 	 * @static
 	 * @template T
-	 * @param {ObjMap<T>} base
-	 * @param {ObjMap<T>} merge
-	 * @returns {ObjMap<T>}
+	 * @param {*} base
+	 * @param {*} merge
+	 * @returns {*}
 	 * @memberof ObjectUtils
 	 */
 	public static deepMerge(base: any, merge: any): any {
