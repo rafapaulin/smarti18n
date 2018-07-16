@@ -13,7 +13,7 @@
 		"pluralization": {
 			"test1": "There is one orange.|There is many oranges.",
 			"test2": "{0}There is no orange.|{1}There is one orange.|[2,10]There are some oranges.|[11,*]There are many oranges.",
-			"test3": "There is one :fruit.|There is many :fruits."
+			"test3": "There is :qtd orange.|There is :qtd oranges."
 		}
 	}
 }
