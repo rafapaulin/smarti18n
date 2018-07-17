@@ -3,6 +3,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { Smarti18nService } from '../services/smarti18n.service';
+import { ObjectUtils } from '../utils';
 
 @Pipe({
 	name: 'smarti18n',
@@ -36,7 +37,8 @@ export class Smarti18nPipe implements PipeTransform, OnDestroy {
 	 * Localizes the input
 	 * @param {string} value dot notation localizable path
 	 * @param {*} vars ```Key:Value``` pairs object for localized interpolation
-	 * @returns {string}
+	 * @param {number} count Value to be taken in account in the pluralization process
+	 * @returns {string} translated string.
 	 * @memberof Smarti18nPipe
 	 */
 	public transform(value: string, vars: any = null, count?: number): string {
@@ -46,12 +48,11 @@ export class Smarti18nPipe implements PipeTransform, OnDestroy {
 		if (
 			this.path !== value ||
 			this.varsPropertyHasChanged(vars) ||
-			(this.count && this.count !== count)
+			(ObjectUtils.isTruthy(this.count) && ObjectUtils.isTruthy(count) && this.count !== count)
 		) {
 			this.vars = vars;
 			this.path = value;
 			this.count = count;
-			console.log(this.count);
 			this.transformed = this.smarti18n.getTranslation(this.path, this.vars, this.count);
 		}
 
