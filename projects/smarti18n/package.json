@@ -1,6 +1,6 @@
 {
 	"name": "smarti18n",
-	"version": "0.2.1",
+	"version": "0.2.2",
 	"repository": "github:rafapaulin/smarti18n",
 	"keywords": [],
 	"homepage": "https://github.com/rafapaulin/smarti18n#readme",
@@ -19,7 +19,6 @@
 		}
 	],
 	"main": "src/public_api.ts",
-	"private": true,
 	"peerDependencies": {
 		"@angular/common": "^6.0.0-rc.0 || ^6.0.0",
 		"@angular/core": "^6.0.0-rc.0 || ^6.0.0",
