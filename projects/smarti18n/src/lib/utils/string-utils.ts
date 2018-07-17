@@ -20,6 +20,13 @@ export class StringUtils {
 		return string;
 	}
 
+
+	/**
+	 * Pluralize the provided sentence according to ```countVal```.
+	 * @param {string} string String to be pluralized
+	 * @param {number} countVal variable taken into account when pluralizing.
+	 * @returns {string} The pluralized string.
+	 */
 	public static pluralize(string: string, countVal: number) {
 		countVal = Number(countVal);
 
