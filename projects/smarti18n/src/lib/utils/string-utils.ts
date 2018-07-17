@@ -36,9 +36,9 @@ export class StringUtils {
 
 				rangeData.shift();
 
-				let range: any[] = rangeData.filter(val => !!val);
-
-				range = range.map(val => val === '*' ? Number.MAX_SAFE_INTEGER : Number(val));
+				const range = rangeData
+								.filter(val => !!val)
+								.map(val => val === '*' ? Number.MAX_SAFE_INTEGER : Number(val));
 
 				if (range[1] && range[0] >= range[1]) throw new Error(`Lower limit must be less than higher limit. (${options[i]})`);
 
