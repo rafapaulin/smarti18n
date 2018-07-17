@@ -11,9 +11,9 @@
 			"test1": "I have an iguana. Its name is :iguanaName. I also have two cats: a black one named :blackCatName, and a white one called :whiteCatName."
 		},
 		"pluralization": {
-			"test1": "There is one orange.|There is many oranges.",
-			"test2": "{0}There is no orange.|{1}There is one orange.|[2,10]There are some oranges.|[11,*]There are many oranges.",
-			"test3": "There is :qtd orange.|There is :qtd oranges."
+			"test1": "There is one orange.|There are many oranges.",
+			"test2": "{0}There is no oranges.|{1}There is one orange.|[2,10]There are some oranges.|[11,*]There are many oranges.",
+			"test3": "There is :qtd orange.|There are :qtd oranges."
 		}
 	}
 }
