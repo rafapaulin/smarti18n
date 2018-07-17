@@ -21,4 +21,12 @@ export class ObjectUtils {
 		});
 		return result;
 	}
+
+	/**
+	 * Tests if the entity provided is truthy.
+	 * @param {*} value Entity to be tested.
+	 */
+	public static isTruthy(value: any) {
+		return value !== null && value !== undefined;
+	}
 }
