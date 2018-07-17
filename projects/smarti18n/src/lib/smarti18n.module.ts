@@ -1,7 +1,7 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { Smarti18nDirective } from './directives/smarti18n.directive';
 import { Smarti18nPipe } from './pipes/smarti18n.pipe';
-import { Smarti18nService, ConfigService, LocaleLoaderService, DefaultLoaderService } from './services';
+import { LocaleLoaderService, DefaultLoaderService } from './services';
 
 @NgModule({
 	declarations: [

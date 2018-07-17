@@ -1,7 +1,6 @@
-import { Injectable, Injector } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, forkJoin } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 import { ObjMap } from '../../models';
 import { LocaleLoaderInterface } from './locale-loader.interface';
@@ -9,17 +8,17 @@ import { LocaleLoaderInterface } from './locale-loader.interface';
 @Injectable()
 export class DefaultLoaderService implements LocaleLoaderInterface {
 	/**
-	 *Creates an instance of HttpLoaderService.
-	 * @param {HttpClient} http
+	 * Creates an instance of HttpLoaderService.
+	 * @param http
 	 * @memberof HttpLoaderService
 	 */
 	constructor(private http: HttpClient) { }
 
 
 	/**
-	 * returns an observable for the loading of a locale
-	 *
-	 * @returns {Observable<ObjMap<string>>}
+	 * Returns an observable for the loading of a locale
+	 * @param locale The desired locale.
+	 * @returns The result of the ```.i18n.json``` file.
 	 * @memberof HttpLoaderService
 	 */
 	public load(locale: string): Observable<ObjMap<string>> {
