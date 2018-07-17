@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { forkJoin, Subject, Observable } from 'rxjs';
 
@@ -21,8 +20,8 @@ export class Smarti18nService {
 
 	/**
 	 *Creates an instance of Smarti18nService.
-	 * @param {ConfigService} configService
-	 * @param {LocaleLoaderService} loader
+	 * @param configService
+	 * @param loader
 	 * @memberof Smarti18nService
 	 */
 	constructor(
@@ -38,43 +37,44 @@ export class Smarti18nService {
 
 	/**
 	 * Set a entirely new config object.
-	 * @param {Config} configObject
+	 * @param configObject
 	 * @memberof Smarti18nService
 	 */
-	public setConfig(configObject: Config) {
+	public setConfig(configObject: Config): void {
 		this.configService.applyConfig(configObject);
 	}
 
 	/**
 	 * Set a new locale to be used on translations.
-	 * @param {string} locale
+	 * @param locale The new desired locale
 	 * @memberof Smarti18nService
 	 */
-	public setLocale(locale: string) {
+	public setLocale(locale: string): void {
 		this.configService.applyConfig({ locale });
 	}
 
 	/**
 	 * Get the current set locale.
-	 * @returns
+	 * @returns the currently configured locale
 	 * @memberof Smarti18nService
 	 */
-	public getLocale() {
+	public getLocale(): string {
 		return this.config.locale;
 	}
 
 	/**
 	 * Get the translation of the provided string.
-	 * @param {string} jsonMap
-	 * @param {*} [variables]
-	 * @returns
+	 * @param jsonMap The map to the translation object key.
+	 * @param variables Variables to be interpolated
+	 * @param pluralize Numeric value used to parse the pluralization
+	 * @returns The fully translated, counted and interpolated string
 	 * @memberof Smarti18nService
 	 */
-	public getTranslation(jsonMap: string, variables?: any, pluralize?: number) {
+	public getTranslation(jsonMap: string, variables?: any, pluralize?: number): string {
 		if (this.localization) {
 			let translation = this.getTranslatedString(jsonMap);
 
-			if (pluralize || pluralize === 0) translation = StringUtils.pluralize(translation, pluralize);
+			if (ObjectUtils.isTruthy(pluralize)) translation = StringUtils.pluralize(translation, pluralize);
 			if (variables) translation = StringUtils.interpolate(translation, variables);
 
 			return translation;
@@ -83,12 +83,11 @@ export class Smarti18nService {
 
 	/**
 	 * Reduces the ```localization``` object to retrieve the translated string.
-	 * @private
-	 * @param {string} jsonMap
-	 * @returns
+	 * @param jsonMap The map to the translation object key.
+	 * @returns the raw translated string.
 	 * @memberof Smarti18nService
 	 */
-	private getTranslatedString(jsonMap: string) {
+	private getTranslatedString(jsonMap: string): string {
 		const jsomMapArray = jsonMap.split('.');
 		const fnReduce = (a, b) => a ? a[b] : null;
 
@@ -97,10 +96,10 @@ export class Smarti18nService {
 
 	/**
 	 * Retrieve the localization files, merge them if needed and save the result on memory
-	 * @private
+	 * @param config The ```smarti18n``` config object
 	 * @memberof Smarti18nService
 	 */
-	private loadLocaleFiles(config: Config) {
+	private loadLocaleFiles(config: Config): void {
 		const requests = [config.defaultLocale, config.locale]
 			.filter(locale => !!locale)
 			.map(locale => this.loader.load(locale));

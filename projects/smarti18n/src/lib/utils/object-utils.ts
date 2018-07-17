@@ -2,13 +2,10 @@ import { ObjMap } from '../models';
 
 export class ObjectUtils {
 	/**
-	 * deep merge two objects
-	 *
-	 * @static
-	 * @template T
-	 * @param {*} base
-	 * @param {*} merge
-	 * @returns {*}
+	 * Deep merge two objects
+	 * @param base Object to be the merge "host"
+	 * @param merge Object to be merged into "host"
+	 * @returns merged Object
 	 * @memberof ObjectUtils
 	 */
 	public static deepMerge(base: any, merge: any): any {
@@ -24,9 +21,9 @@ export class ObjectUtils {
 
 	/**
 	 * Tests if the entity provided is truthy.
-	 * @param {*} value Entity to be tested.
+	 * @param value Entity to be tested.
 	 */
-	public static isTruthy(value: any) {
+	public static isTruthy(value: any): boolean {
 		return value !== null && value !== undefined;
 	}
 }

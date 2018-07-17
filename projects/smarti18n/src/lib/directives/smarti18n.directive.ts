@@ -29,8 +29,8 @@ export class Smarti18nDirective implements OnInit, OnChanges, OnDestroy {
 
 	/**
 	 *Creates an instance of Smarti18nDirective.
-	 * @param {ElementRef} hostEl
-	 * @param {Smarti18nService} smarti18nService
+	 * @param hostEl
+	 * @param smarti18nService
 	 * @memberof Smarti18nDirective
 	 */
 	constructor(
@@ -39,8 +39,7 @@ export class Smarti18nDirective implements OnInit, OnChanges, OnDestroy {
 	) {}
 
 	/**
-	 * init method - called by @angular
-	 *
+	 * Init method - called by @angular
 	 * @memberof Smarti18nDirective
 	 */
 	public ngOnInit(): void {
@@ -53,7 +52,6 @@ export class Smarti18nDirective implements OnInit, OnChanges, OnDestroy {
 
 	/**
 	 * destroy method - called by @angular
-	 *
 	 * @memberof Smarti18nDirective
 	 */
 	public ngOnDestroy(): void {
@@ -62,12 +60,11 @@ export class Smarti18nDirective implements OnInit, OnChanges, OnDestroy {
 	}
 
 	/**
-	 * on changes method - called by @angular
-	 *
-	 * @param {SimpleChanges} changes
+	 * On changes method - called by @angular
+	 * @param changes Changes object
 	 * @memberof Smarti18nDirective
 	 */
-	ngOnChanges(changes: SimpleChanges) {
+	ngOnChanges(changes: SimpleChanges): void {
 		if (changes.currentValue !== changes.previousValue)
 			this.isValidDotNotation(this.jsonMap);
 			this.translate();
@@ -75,10 +72,8 @@ export class Smarti18nDirective implements OnInit, OnChanges, OnDestroy {
 
 	/**
 	 * validates if the current dot notation is valid
-	 *
-	 * @private
-	 * @param {string} jsonMap
-	 * @returns {boolean}
+	 * @param jsonMap The map to the translation object key.
+	 * @returns True if it was a valid dot notation
 	 * @memberof Smarti18nDirective
 	 */
 	private isValidDotNotation(jsonMap: string): boolean {
@@ -88,9 +83,7 @@ export class Smarti18nDirective implements OnInit, OnChanges, OnDestroy {
 	}
 
 	/**
-	 * does the actual translation and changing of DOM
-	 *
-	 * @private
+	 * Does the actual translation and changing of DOM
 	 * @memberof Smarti18nDirective
 	 */
 	private translate(): void {

@@ -13,15 +13,14 @@ export class ConfigService {
 	public get onConfigChanged(): Observable<ConfigChange> { return this.configChanged.asObservable(); }
 
 	/**
-	 *Creates an instance of ConfigService.
+	 * Creates an instance of ConfigService.
 	 * @memberof ConfigService
 	 */
 	constructor() {}
 
 	/**
 	 * apply changes to the config
-	 *
-	 * @param {Config} newConfig    config changes to apply
+	 * @param newConfig Config changes to apply
 	 * @memberof ConfigService
 	 */
 	applyConfig(newConfig: Config): void {

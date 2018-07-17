@@ -1,10 +1,10 @@
 export class StringUtils {
 	/**
 	 * Interpolate the variables passed on the string.
-	 * @param {string} string String to be interpolated.
-	 * @param {{}} variables Object containing the ```key:value``` pairs to be interpolated.
+	 * @param string String to be interpolated.
+	 * @param variables Object containing the ```key:value``` pairs to be interpolated.
 	 */
-	public static interpolate(string: string, variables: any) {
+	public static interpolate(string: string, variables: any): string {
 		const stringVars = string.match(/:\w+[^\s:\.\,$\(\)\[\]\*]/g);
 
 		if (!stringVars || stringVars.length <= 0)
@@ -23,11 +23,11 @@ export class StringUtils {
 
 	/**
 	 * Pluralize the provided sentence according to ```countVal```.
-	 * @param {string} string String to be pluralized
-	 * @param {number} countVal variable taken into account when pluralizing.
-	 * @returns {string} The pluralized string.
+	 * @param string String to be pluralized
+	 * @param countVal variable taken into account when pluralizing.
+	 * @returns The pluralized string.
 	 */
-	public static pluralize(string: string, countVal: number) {
+	public static pluralize(string: string, countVal: number): string {
 		countVal = Number(countVal);
 
 		const COMPLEX_COUNT_REGEX = /^(?:(?:{(\d+)})|(?:\[(\d+),(\d+|\*)\]))/;
