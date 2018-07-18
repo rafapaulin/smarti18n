@@ -31,12 +31,10 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-      - run: npm run test
       - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
       - run: npm run build-lib
       - run: cp ./CHANGELOG.md ./dist/smarti18n/CHANGELOG.md
-      - run: cd dist/smarti18n
-      - run: npm publish
+      - run: npm publish ./dist/smarti18n
 
 workflows:
   version: 2
