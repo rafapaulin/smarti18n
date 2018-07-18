@@ -1,4 +1,5 @@
 version: 2
+
 jobs:
   build:
     docker:
@@ -8,11 +9,54 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "package.json" }}
-          - v1-dependencies-
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
       - run: npm install
       - save_cache:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
+
+  test:
+    docker:
+      - image: circleci/node:8.11.1-browsers
+    steps:
+      - checkout
       - run: npm run test
+
+  publish:
+    docker:
+      - image: circleci/node:8.11.1-browsers
+    steps:
+      - checkout
+      - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+      - run: ng build smarti18n --prod
+      - run: cp ./CHANGELOG.md ./dist/smarti18n/CHANGELOG.md
+      - run: cd dist/smarti18n
+      - run: npm publish
+
+workflows:
+  version: 2
+
+  not-taged-builds:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+
+  tagged-build:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+      - publish:
+          requires:
+            - test
+        filters:
+          branches:
+            only:
+              - master
+          tags:
+            only: /^v[0-9]+(\.[0-9]+)*$/
