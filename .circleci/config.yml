@@ -48,7 +48,7 @@ workflows:
               ignore: /^v.*/
             branches:
               ignore: /^master/
-  tagged-build:
+  releases:
     jobs:
       - test:
           filters:
