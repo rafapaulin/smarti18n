@@ -1,6 +1,9 @@
 # Changelog
 
-## 0.5.0
+## 0.5.6
+- Documentation updated to cover the wholw library instructions.
+
+## 0.5.5
 - Pluralization feature added to translations.
 
 ## 0.4.0
