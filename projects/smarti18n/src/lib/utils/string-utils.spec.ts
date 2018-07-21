@@ -21,12 +21,14 @@ describe('StringUtils', () => {
 	});
 
 	describe('pluralize()', () => {
-		const subject1 = 'There is one orange.|There are many oranges.';
-		const subject2 = '{0}There is no oranges.|{1}There is one orange.|[2,10]There are some oranges.|[11,*]There are many oranges.';
+		const subject1 = 'There are no oranges.|There is one orange.|There are many oranges.';
+		const subject2 = '{0}There are no oranges.|{1}There is one orange.|[2,10]There are some oranges.|[11,*]There are many oranges.';
 
 		it('should pluralize the provided simple sentences', () => {
+			const result = StringUtils.pluralize(subject1, 0);
 			const result1 = StringUtils.pluralize(subject1, 1);
 			const result2 = StringUtils.pluralize(subject1, 5);
+			expect(result).toBe('There are no oranges.');
 			expect(result1).toBe('There is one orange.');
 			expect(result2).toBe('There are many oranges.');
 		});
@@ -36,7 +38,7 @@ describe('StringUtils', () => {
 			const result2 = StringUtils.pluralize(subject2, 1);
 			const result3 = StringUtils.pluralize(subject2, 5);
 			const result4 = StringUtils.pluralize(subject2, 20);
-			expect(result1).toBe('There is no oranges.');
+			expect(result1).toBe('There are no oranges.');
 			expect(result2).toBe('There is one orange.');
 			expect(result3).toBe('There are some oranges.');
 			expect(result4).toBe('There are many oranges.');
