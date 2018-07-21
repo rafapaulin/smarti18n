@@ -33,9 +33,12 @@ export class StringUtils {
 		const COMPLEX_COUNT_REGEX = /^(?:(?:{(\d+)})|(?:\[(\d+),(\d+|\*)\]))/;
 
 		if (string.indexOf('|') === -1)
-			throw new Error('There is no plural options. Please use pipe "|" to separe the plural options.');
+			throw new Error(`There is no plural options. Please use pipe "|" to separe the plural options. (string: ${string})`);
 
 		const options = string.split('|');
+
+		if (options.length < 3)
+			throw new Error(`You need to provide at least 3 plural options on your string. (string: ${string})`);
 
 		if (options.every(opt => COMPLEX_COUNT_REGEX.test(opt))) {
 			for (const i in options) {
@@ -47,7 +50,7 @@ export class StringUtils {
 								.filter(val => !!val)
 								.map(val => val === '*' ? Number.MAX_SAFE_INTEGER : Number(val));
 
-				if (range[1] && range[0] >= range[1]) throw new Error(`Lower limit must be less than higher limit. (${options[i]})`);
+				if (range[1] && range[0] >= range[1]) throw new Error(`Lower limit must be less than higher limit. (string: ${options[i]})`);
 
 				if (
 					(range.length === 1 && countVal === range[0]) ||
@@ -58,7 +61,7 @@ export class StringUtils {
 		} else if (options.some(opt => COMPLEX_COUNT_REGEX.test(opt)))
 			throw new Error('Please provide the quantity notation ({total} or [min, max]) in all pluralization options.');
 		else
-			return countVal > 1 ? options[1] : options[0];
+			return countVal === 0 ? options[0] : (countVal === 1 ? options[1] : options[2]);
 
 		return string;
 	}

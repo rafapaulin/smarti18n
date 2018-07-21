@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.7
+- Simple pluralization approach changed from `one-or-many` to `zero-one-or-many`.
+- More descriptive error messages for pluralization errors.
+
 ## 0.5.6
 - Documentation updated to cover the wholw library instructions.
 
