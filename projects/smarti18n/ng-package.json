@@ -4,5 +4,12 @@
 	"deleteDestPath": false,
 	"lib": {
 		"entryFile": "src/public_api.ts"
-	}
+	},
+	"whitelistedNonPeerDependencies": [
+		"chalk",
+		"command-line-args",
+		"command-line-commands",
+		"command-line-usage",
+		"fs-extra"
+	]
 }
