@@ -465,14 +465,7 @@ Example: `{0}I have no apples.|{1}I have one apple.|[2-9]I have some apples.|{10
 ### _Yes! You can combine both variables and pluralization. Just stick with the syntaxes on both topics and you are golden._
 
 ---
-## Roadmap
-
-There's a few things we are planning to implement soon:
-
-- [DONE] A command-line tool to generate i18n asset json files from `i18n.json` files side-by-side with component typescript code;
-- Add a watcher command to the CLI, to work integrated with `ng serve`;
-- An HTTP loader that allows for changing the url to request translation files from;
-- Date and currency localization (i10n);
+## [Roadmap](ROADMAP.md)
 
 ---
 ## [Changelog](CHANGELOG.md)
