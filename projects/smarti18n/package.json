@@ -7,6 +7,9 @@
 	"bugs": {
 		"url": "https://github.com/rafapaulin/smarti18n/issues"
 	},
+	"bin": {
+		"smarti18n": "bin/smarti18n"
+	},
 	"license": "MIT",
 	"contributors": [
 		{
@@ -24,5 +27,12 @@
 		"@angular/core": "^6.0.0-rc.0 || ^6.0.0",
 		"rxjs": "^6.0.0"
 	},
-	"scripts": {}
+	"scripts": {},
+	"dependencies": {
+		"chalk": "^2.4.1",
+		"command-line-args": "^5.0.2",
+		"command-line-commands": "^2.0.1",
+		"command-line-usage": "^5.0.5",
+		"fs-extra": "^7.0.0"
+	}
 }
