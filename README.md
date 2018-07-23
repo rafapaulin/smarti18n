@@ -27,7 +27,7 @@ A better internationalization package for angular 6+
   - [4.5 - Pluralization](#pluralization)
     - [4.5.1 - Simple style](#--simple-style)
     - [4.5.2 - Complex style](#--complex-style)
-- [5 - Roadmap](#roadmap)
+- [5 - Roadmap](ROADMAP.md)
 - [6 - Changelog](CHANGELOG.md)
 
 ---
