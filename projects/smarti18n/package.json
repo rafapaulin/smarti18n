@@ -1,6 +1,6 @@
 {
 	"name": "smarti18n",
-	"version": "0.6.0-rc4",
+	"version": "0.6.0-rc5",
 	"repository": "github:rafapaulin/smarti18n",
 	"keywords": [],
 	"homepage": "https://github.com/rafapaulin/smarti18n#readme",
@@ -8,7 +8,7 @@
 		"url": "https://github.com/rafapaulin/smarti18n/issues"
 	},
 	"bin": {
-		"smarti18n": "bin/smarti18n"
+		"smarti18n": "./bin/smarti18n"
 	},
 	"license": "MIT",
 	"contributors": [
