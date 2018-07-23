@@ -1,0 +1,6 @@
+{
+	"_basePath": "TestComponent",
+	"truth": {
+		"fallback": "Truth Fallback"
+	}
+}

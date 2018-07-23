@@ -8,7 +8,8 @@
 		"test": "ng test smarti18n",
 		"lint": "ng lint",
 		"e2e": "ng e2e",
-		"build-lib": "ng build smarti18n --prod"
+		"build-lib": "ng build smarti18n --prod",
+		"build-smarti18n": "node projects/smarti18n/src/bin/smarti18n.js build --project smarti18nDev"
 	},
 	"dependencies": {
 		"@angular/animations": "^6.0.2",
