@@ -1,8 +1,15 @@
 {
 	"name": "smarti18n",
-	"version": "0.6.0-rc7",
+	"version": "0.6.0",
 	"repository": "github:rafapaulin/smarti18n",
-	"keywords": [],
+	"keywords": [
+		"i18n",
+		"smarti18n",
+		"internationalization",
+		"angular",
+		"angular6",
+		"lazyload"
+	],
 	"homepage": "https://github.com/rafapaulin/smarti18n#readme",
 	"bugs": {
 		"url": "https://github.com/rafapaulin/smarti18n/issues"

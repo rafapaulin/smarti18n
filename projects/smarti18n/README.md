@@ -11,21 +11,24 @@ A better internationalization package for angular 6+
 - [2 - Installation and setup](#install-and-setup)
   - [2.1 - Installation](#installation)
   - [2.2 - Configuration](#configuration)
-- [3 - Usage](#usage)
-  - [3.1 - Translation object](#translation-object)
-  - [3.2 - The Loaders](#the-loaders)
-    - [3.2.1 - Assets loader](#--assets-loader)
-    - [3.2.2 - Write your own loader](#--write-your-own-loader)
-  - [3.3 - Translation techniques](#translation-techniques)
-    - [3.3.1 - Directive](#--directive-template)
-    - [3.3.2 - Pipe](#--pipe-template)
-    - [3.3.3 - Service](#--service-typescript)
-  - [3.4 - Interpolation](#interpolation)
-  - [3.5 - Pluralization](#pluralization)
-    - [3.5.1 - Simple style](#--simple-style)
-    - [3.5.2 - Complex style](#--complex-style)
-- [4 - Roadmap](#roadmap)
-- [5 - Changelog](CHANGELOG.md)
+- [3 - The CLI](#the-cli)
+  - [3.1 - Commands](#commands)
+  - [3.2 - Component-level translation files guidelines](#component-level-translation-files-guidelines)
+- [4 - Usage](#usage)
+  - [4.1 - Translation object](#translation-object)
+  - [4.2 - The Loaders](#the-loaders)
+    - [4.2.1 - Assets loader](#--assets-loader)
+    - [4.2.2 - Write your own loader](#--write-your-own-loader)
+  - [4.3 - Translation techniques](#translation-techniques)
+    - [4.3.1 - Directive](#--directive-template)
+    - [4.3.2 - Pipe](#--pipe-template)
+    - [4.3.3 - Service](#--service-typescript)
+  - [4.4 - Interpolation](#interpolation)
+  - [4.5 - Pluralization](#pluralization)
+    - [4.5.1 - Simple style](#--simple-style)
+    - [4.5.2 - Complex style](#--complex-style)
+- [5 - Roadmap](#roadmap)
+- [6 - Changelog](CHANGELOG.md)
 
 ---
 ## Features
@@ -38,6 +41,8 @@ A better internationalization package for angular 6+
   - [Directive-driven](#directive) (template) translation
   - [Pipe-driven](#pipe) (template) translation
   - [Service-driven](#service) (typescript) translation
+- Command Line Interface
+  - Command to bundle the component-level translation files
 ---
 
 ## Installation and setup
@@ -133,11 +138,79 @@ Example (with the above config):
 ```
 
 ---
+## The CLI
+
+*_Please note that this section only applies to those who use the `defaultLoader`._
+
+This package ships with a CLI to help keep your project nice and tidy.
+
+Just run `$ npx smarti18n <command> <options>` from the root of you project.
+
+### **COMMANDS**
+
+- `help`: Display help information.
+- `build`: Compile all your component-level `.i18n.json` files into the final bundle used by this package.
+
+### _Options_
+- `-h, --help`: Print this usage guide.
+- `-v, --verbose`: Verbose output.
+
+### **COMPONENT-LEVEL TRANSLATION FILES GUIDELINES**
+
+Respecting the folloging guidelines and recommendations will ensure that the CLI will find and compile all your translation files properly, as well as allow you to keep your project organized with component-scoped translation files.
+
+- Your translation files can be stored anywhere inside your project source defined in your `angular.json` file (or on the specified folder), but must me inside a `i18n` subfolder.
+- The extension of your translation files must be `.i18n.json` (I.E.: `en-us.i18n.json`).
+- You may use the `_basePath` key in your translation files to specify a "scope" for the translation keys to avoid potential undesired overwrites. We recommend that you use the `_basePath` key as your component name. For instance:
+
+The following files:
+
+```json
+{
+  "_basePath": "Component1",
+  "duplicatedScopedKey": "value1",
+  "anotherKey": "value2"
+}
+```
+```json
+{
+  "_basePath": "Component2",
+  "duplicatedScopedKey": "value3",
+  "differentKey": "value4"
+}
+```
+```json
+{
+  "generalKey1": "value5",
+  "generalKey2": "value6",
+}
+```
+
+Will compile into:
+
+```json
+{
+  "Component1": {
+    "duplicatedScopedKey": "value1",
+    "anotherKey": "value2"
+  },
+  "Component2": {
+    "duplicatedScopedKey": "value3",
+    "differentKey": "value4"
+  },
+  "generalKey1": "value5",
+  "generalKey2": "value6",
+}
+```
+
+The `jsonMap` dot-notation strings must always point to the final bundled file keys you want to use.
+
+---
 ## Usage
 
 In this section we explain how to use the different features of this lib. Feel free to ask questions or suggest improvements if you feel that something you need is not covered by this documentation.
 
-### **Translation object**
+### **TRANSLATION OBJECT**
 
 Regardless of the loader used, this lib relies on a JSON-like translation file such as:
 ```json
@@ -153,6 +226,7 @@ Regardless of the loader used, this lib relies on a JSON-like translation file s
   }
 }
 ```
+This translation file will be lazy-loaded into memory using as source what is defined in the loader. the `defaultLoader` will load based on the `.i18n.json` files inside the `/assets/i18n` folder.
 
 ### **THE LOADERS**
 
@@ -395,7 +469,8 @@ Example: `{0}I have no apples.|{1}I have one apple.|[2-9]I have some apples.|{10
 
 There's a few things we are planning to implement soon:
 
-- A command-line tool to generate i18n asset json files from `i18n.json` files side-by-side with component typescript code;
+- [DONE] A command-line tool to generate i18n asset json files from `i18n.json` files side-by-side with component typescript code;
+- Add a watcher command to the CLI, to work integrated with `ng serve`;
 - An HTTP loader that allows for changing the url to request translation files from;
 - Date and currency localization (i10n);
 
