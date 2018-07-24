@@ -30,7 +30,7 @@ export class HttpLocaleLoaderService extends LocaleLoaderService {
 	 */
 	public load(locale: string): Observable<ObjMap<string>> {
 		if (!this.configService.config.loader)
-			throw new Error('HttpLoaderService needs a `loaderConfig` set');
+			throw new Error('HttpLoaderService needs the property `loader` set in `setConfig()`');
 		const config = this.configService.config.loader;
 		return this.http.get<ObjMap<string>>(`${config.baseUrl ? config.baseUrl + '/' : ''}${locale}${config.suffix ? '/' + config.suffix : ''}`);
 	}

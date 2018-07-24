@@ -42,7 +42,7 @@ describe('HttpLoaderService', () => {
 
 		it('should raise an error if no config loader config is set', () => {
 			spyOnProperty(configService, 'config').and.returnValue({});
-			expect(() => loader.load('pt-br')).toThrow(new Error('HttpLoaderService needs a `loaderConfig` set'));
+			expect(() => loader.load('pt-br')).toThrow(new Error('HttpLoaderService needs the property `loader` set in `setConfig()`'));
 		});
 
 		it('should do a http call to get locale', () => {

@@ -297,6 +297,16 @@ import { ObjMap, LocaleLoaderService } from 'smarti18n';
 export class MyOwnLoaderService extends LocaleLoaderService {
 	constructor() { super(); }
 
+	/**
+	 * this method must return an object representing the requested locale
+	 * this here results, for example, in the availability of translation for the following keys:
+	 *   - key1
+	 *   - key2.key3
+	 * 
+	 * @param locale The desired locale.
+	 * @returns an observable of the requested locale
+	 * @memberof HttpLoaderService
+	 */
 	public load(locale: string): Observable<ObjMap<string>> {
 		return ObservableOf({
 			key1: 'value',
@@ -307,7 +317,6 @@ export class MyOwnLoaderService extends LocaleLoaderService {
 	}
 }
 ```
-
 ...and using the following in your `root` module to override the injection:
 
 ```typescript
