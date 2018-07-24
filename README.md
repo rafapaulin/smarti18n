@@ -17,8 +17,9 @@ A better internationalization package for angular 6+
 - [4 - Usage](#usage)
   - [4.1 - Translation object](#translation-object)
   - [4.2 - The Loaders](#the-loaders)
-    - [4.2.1 - Assets loader](#--assets-loader)
-    - [4.2.2 - Write your own loader](#--write-your-own-loader)
+    - [4.2.1 - Default assets loader](#--default-assets-loader)
+	- [4.2.3 - Configurable http loader](#--configurable-http-loader)
+    - [4.2.3 - Write your own loader](#--write-your-own-loader)
   - [4.3 - Translation techniques](#translation-techniques)
     - [4.3.1 - Directive](#--directive-template)
     - [4.3.2 - Pipe](#--pipe-template)
@@ -232,7 +233,7 @@ This translation file will be lazy-loaded into memory using as source what is de
 
 The loaders is the part of the lib which loads your translation objects into memory. We provide the default assets-loader out-of-the-box. We have [plans](#roadmap) to include other loaders in the future.
 
-### _- Assets loader_
+### _- Default assets loader_
 
 The default assets loader relies on the following file structure:
 ```
@@ -246,11 +247,84 @@ Your translation files:
 - Should be named with the same name as you set on the [config method](#install-and-setup) of the service you called in your `AppComponent`. The same rule goes for further `.setLocale(locale)` calls to change the language of your application.
 - Must always have `.i18n.json` as extension. (`en-us.i18n.json`)
 
-We recommend that you scope your translation keys inside a component key. This process will be automatized [in the future](#roadmap).
+We recommend that you scope your translation keys inside a component key. This process can be automatized using the [embedded CLI](#the-cli).
+
+### _- Configurable http loader_
+
+Instead of using the default assets loader, you can instead use the other embedded loader, the Http Loader. This uses a special configuration in `config` to give you complete freedom of where/how to store your locale data. To use, simply need to import the module at `root` using the `httpLoader()` method:
+
+```typescript
+import { Smarti18nModule } from 'smarti18n';
+
+// [...]
+
+@NgModule({
+  imports: [
+    Smarti18nModule.httpLoader()
+  ]
+})
+```
+
+and pass the necessary configuration, following the schema into the optional `loader` property on `setConfig()`:
+
+```typescript
+smarti18n.setConfig({
+	defaultLocale: 'en-us',
+	locale: 'pt-br',
+	loader: {
+		"baseUrl": "http://baseUrl",
+		"suffix": "a_suffix"
+	}
+})
+```
+
+either `baseUrl` and `suffix` are optional, but at least one of them should be set. The final url follows the logic
+```typescript
+`${baseUrl || ''}/${locale}/${suffix || ''}`
+```
+so for the example above, we get `http://baseUrl/{locale}/a_suffix`
 
 ### _- Write your own loader_
 
-_TO DO!_
+You can create your own loader by creating a new service class, inheriting from `LocaleLoaderService`:
+
+```typescript
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, of as observableOf } from 'rxjs';
+import { ObjMap, LocaleLoaderService } from 'smarti18n';
+
+export class MyOwnLoaderService extends LocaleLoaderService {
+	constructor() { super(); }
+
+	public load(locale: string): Observable<ObjMap<string>> {
+		return ObservableOf({
+			key1: 'value',
+			key2: {
+				key3: 'other value'
+			}
+		});
+	}
+}
+```
+
+...and using the following in your `root` module to override the injection:
+
+```typescript
+import { Smarti18nModule, LocaleLoaderService } from 'smarti18n';
+import { MyOwnLoaderService } from './my-own-loader.service';
+
+// [...]
+
+@NgModule({
+  imports: [
+    Smarti18nModule // no need to import using either `defaultLoader` or `httpLoader`
+  ],
+  providers: [
+	  { provide: LocaleLoaderService, useClass: MyOwnLoaderService } // override default service injection
+  ]
+})
+```
 
 ### **TRANSLATION TECHNIQUES**
 
