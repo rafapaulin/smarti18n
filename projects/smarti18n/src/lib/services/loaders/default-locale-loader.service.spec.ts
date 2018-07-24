@@ -1,18 +1,18 @@
 import { TestBed, getTestBed, inject } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-import { DefaultLoaderService } from './default-locale-loader.service';
+import { DefaultLocaleLoaderService } from './default-locale-loader.service';
 
 describe('DefaultLoaderService', () => {
-	let loader: DefaultLoaderService;
+	let loader: DefaultLocaleLoaderService;
 	let httpMock: HttpTestingController;
 
 	beforeEach(() => {
 		TestBed.configureTestingModule({
 			imports: [HttpClientTestingModule],
-			providers: [DefaultLoaderService]
+			providers: [DefaultLocaleLoaderService]
 		});
-		loader = getTestBed().get(DefaultLoaderService);
+		loader = getTestBed().get(DefaultLocaleLoaderService);
 		httpMock = getTestBed().get(HttpTestingController);
 	});
 

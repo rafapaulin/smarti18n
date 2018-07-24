@@ -3,16 +3,16 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { ObjMap } from '../../models';
-import { LocaleLoaderInterface } from './locale-loader.interface';
+import { LocaleLoaderService } from './locale-loader.service';
 
 @Injectable()
-export class DefaultLoaderService implements LocaleLoaderInterface {
+export class DefaultLocaleLoaderService extends LocaleLoaderService {
 	/**
 	 * Creates an instance of HttpLoaderService.
 	 * @param http
 	 * @memberof HttpLoaderService
 	 */
-	constructor(private http: HttpClient) { }
+	constructor(private http: HttpClient) { super(); }
 
 
 	/**
