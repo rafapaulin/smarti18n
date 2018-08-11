@@ -28,6 +28,7 @@ module.exports = {
 		definitions: [
 			{ name: 'help', alias: 'h', type: Boolean, defaultValue: false },
 			{ name: 'verbose', alias: 'v', type: Boolean, defaultValue: false },
+			{ name: 'flat', type: Boolean, defaultValue: true },
 			{ name: 'project', alias: 'p', type: String, defaultValue: undefined }
 		],
 		usage: [{
@@ -42,6 +43,7 @@ module.exports = {
 			optionList: [
 				{ name: 'help', alias: 'h', description: 'Displays this usage guide.' },
 				{ name: 'verbose', alias: 'v', description: 'Verbose output' },
+				{ name: 'flat', description: 'Flat final product (disables lazy loading support)' },
 				{ name: 'project', alias: 'p', description: 'Angular project to build' }
 			]
 		}]

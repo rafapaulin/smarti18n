@@ -13,6 +13,8 @@ module.exports = class BuildCommand {
 			? (...args) => console.log(chalk.gray(args))
 			: () => {}
 		this.locales = {};
+		if (!this.options.flat)
+			this.modules = {};
 	}
 
 	/**
@@ -87,6 +89,7 @@ module.exports = class BuildCommand {
 		this.verbose(`    - ${filePath}`);
 		if (!this.locales[locale])
 			this.locales[locale] = {};
+		// TODO change here to take into account lazy loading generation
 		this.writeDataToGraph(this.locales[locale], require(filePath));
 	}
 
