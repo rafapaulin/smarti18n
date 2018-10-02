@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.7.0
+- Base path must now be set in a (optional) ``` config.i18n.json ``` file on the same folder as the translation files.
+  - Config can be set in a component-level.
+  - ``` basePath: String ```: Sets the namespace of the translation file. Defaults to ``` 'base' ```.
+  - ``` loadMode: ['lazy|'eager'] ```: Sets how the translation file should be loaded. Defaults to ``` 'eager' ```.
+- Assets folder structure changed to support both eager and lazy loaded translation files.
+  - All the eager-loaded translation now sits on ``` assets/i18n/{locale}/base.i18n.json ```.
+  - All the lazy-loaded translation now sits on ``` assets/i18n/{locale}/{config.basePath}.i18n.json ```.
+
 ## 0.6.0
 - The translation files now should be created inside a folder `i18n`.
   - Recomended foler structure example: `[...]/componentFolder/i18n/en-us.i18n.json`.

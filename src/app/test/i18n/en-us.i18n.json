@@ -1,5 +1,4 @@
 {
-	"_basePath": "TestComponent",
 	"test1": "This is a successfull test.",
 	"truth": {
 		"isTrue": "True!",
