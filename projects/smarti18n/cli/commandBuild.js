@@ -26,6 +26,7 @@ module.exports = class BuildCommand {
 		this.saveLocales(projectSrcPath);
 	}
 
+
 	/**
 	 *
 	 *
@@ -48,7 +49,7 @@ module.exports = class BuildCommand {
 	 * @returns
 	 */
 	separateFolders(basePath, list) {
-		const i18npath = path.join(basePath, 'i18n');
+		const i18nPath = path.join(basePath, 'i18n');
 		return {
 			folders: list
 				.map(entry => path.join(basePath, entry))
@@ -57,7 +58,7 @@ module.exports = class BuildCommand {
 					&& !fullPath.endsWith('i18n')
 					&& !fullPath.endsWith('assets')
 					&& fs.lstatSync(fullPath).isDirectory()),
-			i18n: fs.existsSync(i18npath) ? i18npath : undefined
+			i18n: fs.existsSync(i18nPath) ? i18nPath : undefined
 		};
 	}
 
@@ -67,15 +68,19 @@ module.exports = class BuildCommand {
 	 * @param {*} i18nPath
 	 */
 	addDataFromDir(i18nPath) {
+		const configRegex = /^config\.i18n\.json/
 		const i18nRegex = /(.*)\.i18n\.json/i;
 		const list = fs.readdirSync(i18nPath);
+
 		this.verbose(`- ${i18nPath}`);
-		list.filter(f => f.endsWith('.i18n.json'))
+
+		list.filter(f => !configRegex.test(f))
 			.map(f => ({
 				locale: i18nRegex.exec(f)[1],
-				filePath: path.join(i18nPath, f)
+				filePath: path.join(i18nPath, f),
+				config: path.join(i18nPath, 'config.i18n.json')
 			}))
-			.forEach(({locale, filePath}) => this.addDataFromFile(locale, filePath));
+			.forEach(({locale, filePath, config}) => {this.addDataFromFile(locale, filePath, config)});
 	}
 	/**
 	 *
@@ -83,11 +88,19 @@ module.exports = class BuildCommand {
 	 * @param {*} locale
 	 * @param {*} filePath
 	 */
-	addDataFromFile(locale, filePath) {
+	addDataFromFile(locale, filePath, config) {
+		const hasConfig = fs.existsSync(config);
+
 		this.verbose(`    - ${filePath}`);
+
 		if (!this.locales[locale])
 			this.locales[locale] = {};
-		this.writeDataToGraph(this.locales[locale], require(filePath));
+
+		this.writeDataToGraph(
+			this.locales[locale],
+			filePath,
+			hasConfig ? config : null
+		);
 	}
 
 	/**
@@ -96,20 +109,45 @@ module.exports = class BuildCommand {
 	 * @param {*} writeData
 	 * @param {*} readData
 	 */
-	writeDataToGraph(writeData, readData) {
-		const orig = writeData;
-		// create and navigate into base path if available
-		if (readData._basePath) {
-			const basePath = readData._basePath.split('.');
-			basePath.forEach(p => {
-				if (!writeData.hasOwnProperty(p) && p !== '_basePath') {
-					writeData[p] = {};
-					writeData = writeData[p];
-				}
-			})
+	writeDataToGraph(writeData, filePath, config) {
+		const readData = require(filePath);
+		let basePath;
+
+		config = config ? require(config) : {};
+
+		config.loadMode = config.loadMode ? config.loadMode : 'eager';
+
+		switch (config.loadMode) {
+			case 'eager':
+				if (!config.basePath) {
+					console.log(chalk.yellow('warning: no basePath set to eager loaded file. Translation keys may be overwritten!'));
+					console.log(chalk.grey(filePath));
+					console.log();
+
+					basePath = 'base';
+				} else
+					basePath = `base.${config.basePath}`;
+				break;
+			case 'lazy':
+				if (!config.basePath) {
+					console.log(chalk.red('error: lazy load mode requires \'basePath\' to be set!'));
+					console.log(chalk.grey(filePath));
+					console.log();
+
+					throw new Error('lazy load mode requires "basePath" to be set!');
+				} else
+				basePath = config.basePath;
+				break;
 		}
+
+		writeData = this.parseDotNotation(basePath, writeData);
+
 		// write the rest
-		Object.keys(readData).forEach(k => k !== '_basePath' ? writeData[k] = readData[k] : null);
+		Object.keys(readData).forEach(k => {
+			const translation = basePath.split('.').reduce((a, b) => a[b], writeData);
+
+			translation[k] = readData[k];
+		});
 	}
 
 	/**
@@ -119,9 +157,13 @@ module.exports = class BuildCommand {
 	 */
 	saveLocales(saveBasePath) {
 		Object.keys(this.locales).forEach(locale => {
-			const finalPath = path.join(saveBasePath, 'assets', 'i18n', `${locale}.i18n.json`);
-			fs.outputJsonSync(finalPath, this.locales[locale]);
-			console.log(chalk.green(`${finalPath} written successfully`));
+			const obj = this.locales[locale];
+			Object.keys(obj).forEach(key => {
+				const finalPath = path.join(saveBasePath, 'assets', 'i18n', locale, `${key}.i18n.json`);
+				fs.outputJsonSync(finalPath, obj[key]);
+
+				console.log(chalk.green(`${finalPath} written successfully`));
+			});
 		});
 	}
 
@@ -133,14 +175,32 @@ module.exports = class BuildCommand {
 	 */
 	getSrcPath(project = undefined) {
 		const angularConfigPath = path.join(process.cwd(), 'angular.json');
-		if (!fs.existsSync(angularConfigPath))
+		if (!fs.existsSync(angularConfigPath)) {
+			console.log(chalk.red('error: Angular config not found!'));
 			throw new Error('Angular config not found');
+		}
+
 		const angularConfig = require(angularConfigPath);
 		project = project || angularConfig.defaultProject;
 		this.verbose(chalk.gray(`building project ${project}...`));
-		if (!angularConfig.projects[project])
+		if (!angularConfig.projects[project]) {
+			console.log(chalk.red('error: Invalid project!'));
 			throw new Error('Invalid project');
+		}
 		else return path.join(process.cwd(), angularConfig.projects[project].sourceRoot);
+	}
+
+	parseDotNotation(str, obj) {
+		const keys = str.split(".");
+		let currentObj = obj;
+
+		for (let i in keys) {
+			const key = keys[i];
+			currentObj[key] = currentObj[key] || {};
+			currentObj = currentObj[key];
+		}
+
+		return obj;
 	}
 
 	/**
