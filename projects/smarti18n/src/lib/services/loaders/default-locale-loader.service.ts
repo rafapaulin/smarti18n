@@ -22,6 +22,6 @@ export class DefaultLocaleLoaderService extends LocaleLoaderService {
 	 * @memberof HttpLoaderService
 	 */
 	public load(locale: string): Observable<ObjMap<string>> {
-		return this.http.get<ObjMap<string>>(`/assets/i18n/${locale}.i18n.json`);
+		return this.http.get<ObjMap<string>>(`/assets/i18n/${locale}/base.i18n.json`);
 	}
 }

@@ -1,6 +1,9 @@
 # Changelog
 
-## 0.7.0
+## 0.6.2
+- Default locale loader refactored to eager load ``` assets/i18n/{locale}/base.i18n.json ``` by default
+
+## 0.6.1
 - Base path must now be set in a (optional) ``` config.i18n.json ``` file on the same folder as the translation files.
   - Config can be set in a component-level.
   - ``` basePath: String ```: Sets the namespace of the translation file. Defaults to ``` 'base' ```.

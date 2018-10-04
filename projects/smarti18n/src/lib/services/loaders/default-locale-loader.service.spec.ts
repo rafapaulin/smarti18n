@@ -34,7 +34,7 @@ describe('DefaultLoaderService', () => {
 				expect(localeData.test).toBe('testado');
 			});
 
-			const req = httpMock.expectOne('/assets/i18n/pt-br.i18n.json');
+			const req = httpMock.expectOne('/assets/i18n/pt-br/base.i18n.json');
 			req.flush(dummyLocale_pt_br);
 		});
 	});

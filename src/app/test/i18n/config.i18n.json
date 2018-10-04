@@ -1,4 +1,3 @@
 {
-	"basePath": "TestComponent",
-	"loadMode": "lazy"
+	"basePath": "TestComponent"
 }
