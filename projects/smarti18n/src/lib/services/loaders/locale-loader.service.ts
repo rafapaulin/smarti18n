@@ -12,4 +12,5 @@ export abstract class LocaleLoaderService {
 	 * @memberof LocaleLoaderService
 	 */
 	public abstract load(locale: string): Observable<ObjMap<string>>;
+	public abstract lazyLoad(locale: string, fileName: string): Observable<ObjMap<string>>;
 }

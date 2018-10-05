@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.6.3
+- Added a ``` lazyloadChunk ``` method on the ``` smarti18n.service ``` to allow translation chunks to be lazyloaded on demand.
+
 ## 0.6.2
 - Default locale loader refactored to eager load ``` assets/i18n/{locale}/base.i18n.json ``` by default
 

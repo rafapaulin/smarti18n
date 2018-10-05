@@ -12,6 +12,7 @@ import { LocaleLoaderService } from './loaders/locale-loader.service';
 })
 export class Smarti18nService {
 	private localization: ObjMap<string>;
+	private lazLoadChunks = [];
 	private localeChanged = new Subject();
 	public get onLocaleChanged(): Observable<any> {
 		return this.localeChanged.asObservable();
@@ -31,7 +32,10 @@ export class Smarti18nService {
 		this.configService
 			.onConfigChanged
 			.subscribe(
-				configChange => this.loadLocaleFiles(configChange.config)
+				configChange => {
+					this.loadLocaleFiles(configChange.config);
+					this.lazyloadChunk(configChange.config);
+				}
 			);
 	}
 
@@ -74,8 +78,11 @@ export class Smarti18nService {
 		if (this.localization) {
 			let translation = this.getTranslatedString(jsonMap);
 
-			if (ObjectUtils.isTruthy(pluralize)) translation = StringUtils.pluralize(translation, pluralize);
-			if (variables) translation = StringUtils.interpolate(translation, variables);
+			if (ObjectUtils.isTruthy(pluralize))
+				translation = StringUtils.pluralize(translation, pluralize);
+
+			if (variables)
+				translation = StringUtils.interpolate(translation, variables);
 
 			return translation;
 		}
@@ -89,10 +96,42 @@ export class Smarti18nService {
 	 */
 	private getTranslatedString(jsonMap: string): string {
 		const jsomMapArray = jsonMap.split('.');
+		const fileName = jsonMap.split('.')[0];
 		const fnReduce = (a, b) => a ? a[b] : null;
+		const translation = jsomMapArray.reduce(fnReduce, this.localization);
+		if (translation)
+			return	jsomMapArray.reduce(fnReduce, this.localization);
 
-		return	jsomMapArray.reduce(fnReduce, this.localization) || jsonMap;
+		if (!this.lazLoadChunks.some(chunk => chunk === fileName)) {
+			this.lazLoadChunks.push(fileName);
+
+			this.lazyloadChunk();
+		}
 	}
+
+	lazyloadChunk(config: Config = this.config): void {
+		if (this.lazLoadChunks.length > 0) {
+			for (const chunkName of this.lazLoadChunks) {
+				const requests = [config.defaultLocale, config.locale]
+					.filter(locale => !!locale)
+					.map(locale => this.loader.lazyLoad(locale, chunkName));
+
+				const request = requests.length > 1 ?
+					forkJoin(requests).pipe(map(([defaultLocale, locale]) => ObjectUtils.deepMerge(defaultLocale, locale))) :
+					requests[0];
+
+				if (request) {
+					request.toPromise()
+					.catch(error => console.error(error.message))
+					.then(chunk => {
+						this.localization[chunkName] = chunk;
+						this.localeChanged.next();
+					});
+				}
+			}
+		}
+	}
+
 
 	/**
 	 * Retrieve the localization files, merge them if needed and save the result on memory
@@ -103,9 +142,9 @@ export class Smarti18nService {
 		const requests = [config.defaultLocale, config.locale]
 			.filter(locale => !!locale)
 			.map(locale => this.loader.load(locale));
-		const request = requests.length > 1
-			? forkJoin(requests).pipe(map(([defaultLocale, locale]) => ObjectUtils.deepMerge(defaultLocale, locale)))
-			: requests[0];
+		const request = requests.length > 1 ?
+			forkJoin(requests).pipe(map(([defaultLocale, locale]) => ObjectUtils.deepMerge(defaultLocale, locale))) :
+			requests[0];
 		// handle request
 		if (request) {
 			request.toPromise().then(localization => {
