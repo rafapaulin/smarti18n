@@ -34,4 +34,15 @@ export class HttpLocaleLoaderService extends LocaleLoaderService {
 		const config = this.configService.config.loader;
 		return this.http.get<ObjMap<string>>(`${config.baseUrl ? config.baseUrl + '/' : ''}${locale}${config.suffix ? '/' + config.suffix : ''}`);
 	}
+
+	/**
+	 * This method is useless (implemented just to meet the abstract)
+	 * It should be refactored to http loader support lazyload
+	 */
+	public lazyLoad(locale: string): Observable<ObjMap<string>> {
+		if (!this.configService.config.loader)
+			throw new Error('HttpLoaderService needs the property `loader` set in `setConfig()`');
+		const config = this.configService.config.loader;
+		return this.http.get<ObjMap<string>>(`${config.baseUrl ? config.baseUrl + '/' : ''}${locale}${config.suffix ? '/' + config.suffix : ''}`);
+	}
 }

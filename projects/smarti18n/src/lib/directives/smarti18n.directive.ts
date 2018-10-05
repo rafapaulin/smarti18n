@@ -47,7 +47,9 @@ export class Smarti18nDirective implements OnInit, OnChanges, OnDestroy {
 
 		this.smarti18nService.onLocaleChanged
 		.pipe(takeUntil(this.unsubscribe))
-		.subscribe(() => this.translate());
+		.subscribe(() => {
+			this.translate();
+		});
 	}
 
 	/**
@@ -87,6 +89,8 @@ export class Smarti18nDirective implements OnInit, OnChanges, OnDestroy {
 	 * @memberof Smarti18nDirective
 	 */
 	private translate(): void {
-		this.hostEl.nativeElement.innerText = this.smarti18nService.getTranslation(this.jsonMap, this.variables, this.toCount);
+		const translation = this.smarti18nService.getTranslation(this.jsonMap, this.variables, this.toCount);
+
+		this.hostEl.nativeElement.innerText = translation || '';
 	}
 }

@@ -1,3 +1,7 @@
 {
-	"falbackTest": "this is a fallback test"
+	"falbackTest": "this is a fallback test",
+	"pipe": {
+		"works": "Pipe works! hit me!",
+		"workswell": "Pipe really works!!"
+	}
 }

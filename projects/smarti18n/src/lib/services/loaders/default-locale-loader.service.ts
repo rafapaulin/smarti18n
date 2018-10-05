@@ -24,4 +24,8 @@ export class DefaultLocaleLoaderService extends LocaleLoaderService {
 	public load(locale: string): Observable<ObjMap<string>> {
 		return this.http.get<ObjMap<string>>(`/assets/i18n/${locale}/base.i18n.json`);
 	}
+
+	public lazyLoad(locale: string, fileName: string): Observable<ObjMap<string>> {
+		return this.http.get<ObjMap<string>>(`/assets/i18n/${locale}/${fileName}.i18n.json`);
+	}
 }
