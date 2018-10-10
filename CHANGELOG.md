@@ -2,6 +2,7 @@
 
 ## 0.6.3
 - Added a ``` lazyloadChunk ``` method on the ``` smarti18n.service ``` to allow translation chunks to be lazyloaded on demand.
+- An empty string is returned instead of the dotNotation string if a given translation map is not found. This was done to avoid view poping when the translation are being loaded.
 
 ## 0.6.2
 - Default locale loader refactored to eager load ``` assets/i18n/{locale}/base.i18n.json ``` by default
