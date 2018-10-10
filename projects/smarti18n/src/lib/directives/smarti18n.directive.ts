@@ -47,9 +47,7 @@ export class Smarti18nDirective implements OnInit, OnChanges, OnDestroy {
 
 		this.smarti18nService.onLocaleChanged
 		.pipe(takeUntil(this.unsubscribe))
-		.subscribe(() => {
-			this.translate();
-		});
+		.subscribe(() => this.translate());
 	}
 
 	/**
