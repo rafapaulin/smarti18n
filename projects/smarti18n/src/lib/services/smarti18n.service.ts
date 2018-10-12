@@ -99,8 +99,8 @@ export class Smarti18nService {
 		const fileName = jsonMap.split('.')[0];
 		const fnReduce = (a, b) => a ? a[b] : null;
 		const translation = jsomMapArray.reduce(fnReduce, this.localization);
-		if (translation)
-			return	jsomMapArray.reduce(fnReduce, this.localization);
+
+		if (translation) return	translation;
 
 		if (!this.lazLoadChunks.some(chunk => chunk === fileName)) {
 			this.lazLoadChunks.push(fileName);
@@ -116,9 +116,9 @@ export class Smarti18nService {
 					.filter(locale => !!locale)
 					.map(locale => this.loader.lazyLoad(locale, chunkName));
 
-				const request = requests.length > 1 ?
-					forkJoin(requests).pipe(map(([defaultLocale, locale]) => ObjectUtils.deepMerge(defaultLocale, locale))) :
-					requests[0];
+				const request = requests.length > 1
+					? forkJoin(requests).pipe(map(([defaultLocale, locale]) => ObjectUtils.deepMerge(defaultLocale, locale)))
+					: requests[0];
 
 				if (request) {
 					request.toPromise()
